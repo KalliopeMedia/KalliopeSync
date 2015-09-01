@@ -69,6 +69,8 @@ namespace KalliopeSync.Console
                             showHelp));
                     Downloader downloader = new Downloader(container, accountName, accountKey);
                     downloader.DownloadAll(output, result);
+                    Uploader uploader = new Uploader(container, accountName, accountKey);
+                    uploader.Upload(output);
                 }
             }
             catch (Exception ex)

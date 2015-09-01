@@ -73,6 +73,7 @@ namespace KalliopeSync.Core.Full
                 {
                     blockBlob.DownloadToStream(fileStream);
                 }
+                File.SetCreationTime(targetFileName, blockBlob.Properties.LastModified.Value.DateTime);
             }
             else
             {
@@ -86,6 +87,7 @@ namespace KalliopeSync.Core.Full
                     }
                     File.Delete(targetFileName);
                     File.Move(tempName, targetFileName);
+                    File.SetCreationTime(targetFileName, blockBlob.Properties.LastModified.Value.DateTime);
                 }
                 else
                 {
