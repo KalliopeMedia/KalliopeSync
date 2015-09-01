@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Console", "KalliopeSync.Console\KalliopeSync.Console.csproj", "{B1994169-FA3A-4F05-8F45-67A9B8B5DBB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Core", "KalliopeSync.Core\KalliopeSync.Core.csproj", "{4229B84E-EA7A-4B7A-8BFD-32790232D00E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Core.Full", "KalliopeSync.Core.Full\KalliopeSync.Core.Full.csproj", "{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}"
 EndProject
 Global
@@ -13,10 +11,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4229B84E-EA7A-4B7A-8BFD-32790232D00E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4229B84E-EA7A-4B7A-8BFD-32790232D00E}.Debug|x86.Build.0 = Debug|Any CPU
-		{4229B84E-EA7A-4B7A-8BFD-32790232D00E}.Release|x86.ActiveCfg = Release|Any CPU
-		{4229B84E-EA7A-4B7A-8BFD-32790232D00E}.Release|x86.Build.0 = Release|Any CPU
 		{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}.Debug|x86.Build.0 = Debug|Any CPU
 		{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}.Release|x86.ActiveCfg = Release|Any CPU
