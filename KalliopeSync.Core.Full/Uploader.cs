@@ -42,7 +42,7 @@ namespace KalliopeSync.Core.Full
             foreach (IListBlobItem item in container.ListBlobs(null, true))
             {
                 CloudBlockBlob blob = (CloudBlockBlob)item;
-                Logging.Logger.Info(string.Format("Cloud List: Blob {0}", blob.Name));
+                Logging.Logger.Info(string.Format("Cloud List: Blob Name '{0}'", blob.Name));
                 _cloudRepository[blob.Name] = blob;
             }
 
@@ -89,7 +89,7 @@ namespace KalliopeSync.Core.Full
 
         private string GetBlobReferenceName(string fullFileName, string targetFolder)
         {
-            string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "");
+            string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "").Replace(@"\",@"/");
             return blobReferenceName;
 
         }
