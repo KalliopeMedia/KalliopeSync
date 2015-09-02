@@ -15,6 +15,11 @@ namespace KalliopeSync.Core.Full
         private readonly Dictionary<string, CloudBlockBlob> _cloudRepository;
         private readonly Dictionary<string, FileInfo> _localRepository;
 
+        public bool SimulationMode
+        {
+            get;
+            set;
+        }
         public Uploader(string userName, string accountName, string accountKey)
         {
             this._accountName = accountName;
@@ -33,12 +38,11 @@ namespace KalliopeSync.Core.Full
 
             CloudBlobContainer container = blobClient.GetContainerReference(_containerName);
 
-            int currentCount = 0;
+//            int currentCount = 0;
             foreach (IListBlobItem item in container.ListBlobs(null, true))
             {
                 CloudBlockBlob blob = (CloudBlockBlob)item;
-                Console.WriteLine("Cloud List: Blob {0}", blob.Name);
-
+                Logging.Logger.Info(string.Format("Cloud List: Blob {0}", blob.Name));
                 _cloudRepository[blob.Name] = blob;
             }
 
@@ -54,17 +58,28 @@ namespace KalliopeSync.Core.Full
 
         private void Upload(IEnumerable<FileInfo> uploadList, CloudBlobContainer container, string targetFolder)
         {
+            Console.WriteLine("Processing Uploads.");
+            Logging.Logger.Info("Processing Uploads------------------------");
             foreach (var fileInfo in uploadList)
             {
                 string blobReferenceName = GetBlobReferenceName(fileInfo.FullName, targetFolder);
                 var blockBlob = container.GetBlockBlobReference(blobReferenceName);
-                Console.WriteLine("Upload List: File {0}, Blob Reference {1}", fileInfo.FullName, blobReferenceName);
-                using (var fileStream = System.IO.File.OpenRead(fileInfo.FullName))
+                if (!SimulationMode)
                 {
-                    Console.WriteLine("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName);
-                    blockBlob.UploadFromStream(fileStream);
-                }                                
+                    using (var fileStream = System.IO.File.OpenRead(fileInfo.FullName))
+                    {
+                        Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+                        blockBlob.UploadFromStream(fileStream);
+                    }
+                }
+                else
+                {
+                    Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+                }
             }
+            Console.WriteLine("Processing Uploads COMPLETE");
+            Logging.Logger.Info("Processing Uploads COMPLETE----------------");
+
         }
 
         private void Delete(IEnumerable<CloudBlockBlob> deleteList)
@@ -87,14 +102,14 @@ namespace KalliopeSync.Core.Full
                 string blobReferenceName = GetBlobReferenceName(item.Value.FullName, targetFolder);
                 if (!_cloudRepository.ContainsKey(blobReferenceName))
                 {
-                    Console.WriteLine("Added File to UploadList: {0}", blobReferenceName);
+                    Logging.Logger.Info(string.Format("Added File to UploadList: {0}", blobReferenceName));
                     uploadList.Add(item.Value);
                 }
                 else if (_cloudRepository.ContainsKey(blobReferenceName))
                 {
                     if (item.Value.Length != _cloudRepository[blobReferenceName].Properties.Length)
                     {
-                        Console.WriteLine("Added File to UploadList (changed): {0}, cloud {1}, local {2}", blobReferenceName, _cloudRepository[item.Value.Name].Properties.Length, item.Value.Length);
+                        Logging.Logger.Info(string.Format("Added File to UploadList (changed): {0}, cloud {1}, local {2}", blobReferenceName, _cloudRepository[item.Value.Name].Properties.Length, item.Value.Length));
                         uploadList.Add(item.Value);
                     }
                 }
@@ -119,7 +134,7 @@ namespace KalliopeSync.Core.Full
             foreach (var file in filesList)
             {
                 _localRepository.Add(file, new FileInfo(file));
-                Console.WriteLine("Added File to Repo: {0}", file);
+                Logging.Logger.Info(string.Format("Added File to Repo: {0}", file));
             }                
         }
     }

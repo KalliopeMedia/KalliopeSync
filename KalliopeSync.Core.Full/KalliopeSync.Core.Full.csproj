@@ -52,6 +52,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,5 +65,11 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KalliopeSync.Logging\KalliopeSync.Logging.csproj">
+      <Project>{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}</Project>
+      <Name>KalliopeSync.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
