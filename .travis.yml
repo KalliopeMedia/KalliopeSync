@@ -1,0 +1,4 @@
+language: csharp
+solution: KalliopeSync.sln
+mono:
+	- latest
