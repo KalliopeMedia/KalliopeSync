@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using System.Threading;
+using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -14,12 +17,25 @@ namespace KalliopeSync.Core.Full
         private readonly string _containerName;
         private readonly Dictionary<string, CloudBlockBlob> _cloudRepository;
         private readonly Dictionary<string, FileInfo> _localRepository;
+       
+        public int ChunkSize
+        {
+            get;
+            set;
+        }
 
         public bool SimulationMode
         {
             get;
             set;
         }
+
+        public bool FullThrottle
+        {
+            get;
+            set;
+        }
+
         public Uploader(string userName, string accountName, string accountKey)
         {
             this._accountName = accountName;
@@ -27,6 +43,8 @@ namespace KalliopeSync.Core.Full
             this._containerName = userName;
             this._cloudRepository = new Dictionary<string, CloudBlockBlob>();
             this._localRepository = new Dictionary<string, FileInfo>();
+            this.FullThrottle = true;
+            this.ChunkSize = 1024;
         }
 
         public void Upload(string targetFolder)
@@ -68,8 +86,30 @@ namespace KalliopeSync.Core.Full
                 {
                     using (var fileStream = System.IO.File.OpenRead(fileInfo.FullName))
                     {
-                        Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
-                        blockBlob.UploadFromStream(fileStream);
+                        if (this.FullThrottle)
+                        {
+                            blockBlob.UploadFromStream(fileStream);
+                            Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+
+                        }
+                        else
+                        {
+                            byte[] chunk = new byte[ChunkSize];
+                            var id = 1;
+                            var idList = new List<string>();
+                            while (fileStream.Position < fileStream.Length)
+                            {
+                                fileStream.Read(chunk, 0, ChunkSize);
+                                string id64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(
+                                    string.Format(CultureInfo.InvariantCulture, "{0:D4}", id)));
+                                blockBlob.PutBlock(id64, new MemoryStream(chunk), null, null, null);
+                                idList.Add(id64);
+                                id++;
+                                Thread.Sleep(500);
+                            }
+                            blockBlob.PutBlockList(idList);
+                            Logging.Logger.Info(string.Format("Uploaded Chunked file: File {0} to Blob Reference {1} of length {2} in {3} chunks", fileInfo.FullName, blobReferenceName, fileStream.Length, id));
+                        }
                     }
                 }
                 else
@@ -97,6 +137,9 @@ namespace KalliopeSync.Core.Full
         private IEnumerable<FileInfo> CreateUploadList(string targetFolder)
         {
             List<FileInfo> uploadList = new List<FileInfo>();
+            Console.WriteLine("Creating Upload List");
+            Logging.Logger.Info("Creating Upload List");
+
             foreach (var item in _localRepository)
             {
                 string blobReferenceName = GetBlobReferenceName(item.Value.FullName, targetFolder);
@@ -114,6 +157,8 @@ namespace KalliopeSync.Core.Full
                     }
                 }
             }
+            Console.WriteLine("Creating Upload List COMPLETE --------------------------");
+            Logging.Logger.Info("Creating Upload List COMPLETE ------------------------");
             return uploadList;
         }
 

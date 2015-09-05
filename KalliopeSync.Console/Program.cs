@@ -15,6 +15,7 @@ namespace KalliopeSync.Console
         static int maxCount;
         static bool simulate = false;
         static bool showHelp;
+        static bool fullThrottle = false;
 
         public static void Main(string[] args)
         {
@@ -40,17 +41,22 @@ namespace KalliopeSync.Console
                     {
                         "t|output=", "Output folder",
                             (string t) => output = t
-                    },                
-                    { 
-                        "h|help", "Show this message and exit", 
-                        h => showHelp = h != null 
                     },
                     {
                         "s|simulation=", "Simulate changes but don't upload or download files (s=true or t or 1, false/simulation off by default)",
                         (string s) => simulate = (s != null && (s == "true" || s == "t" || s == "1"))
+                    },
+                    {
+                        "f|fullthrottle=", "By default true, uploads as fast as it can. If false, breaks down files in 1024byte chunks and give 500 ms break before uploading each chunk",
+                        (string s) => simulate = (s != null && (s == "true" || s == "t" || s == "1"))
+                    },                
+                    { 
+                        "h|help", "Show this message and exit", 
+                        h => showHelp = h != null 
                     }
                 };
 
+            var sessionId = DateTime.Now.Ticks;
             try
             {
                 options.Parse(args);
@@ -72,11 +78,13 @@ namespace KalliopeSync.Console
                             result,
                             maxCount,
                             showHelp));
+                    Logging.Logger.Info(string.Format("Starting new session id: {0} at {1} :---------------------", sessionId, DateTime.Now.ToLongDateString()));
                     Downloader downloader = new Downloader(container, accountName, accountKey);
                     downloader.SimulationMode = simulate;
                     downloader.DownloadAll(output, result);
                     Uploader uploader = new Uploader(container, accountName, accountKey);
                     uploader.SimulationMode = simulate;
+                    uploader.FullThrottle = fullThrottle;
                     uploader.Upload(output);
                 }
             }
@@ -84,6 +92,10 @@ namespace KalliopeSync.Console
             {
                 System.Console.WriteLine("Error {0}", ex.Message);
                 Logging.Logger.Error("ERROR: " + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                Logging.Logger.Info(string.Format("Ending session {0} at {1} :---------------------", sessionId, DateTime.Now.ToLongDateString()));
             }
         }
 
