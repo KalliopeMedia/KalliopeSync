@@ -10,7 +10,7 @@ using Microsoft.WindowsAzure.Storage.Auth;
 
 namespace KalliopeSync.Core.Full
 {
-    public class Differentiator
+    public class Indexer
     {
         private readonly string _accountName;
         private readonly string _accountKey;
@@ -25,7 +25,7 @@ namespace KalliopeSync.Core.Full
             set;
         }
 
-        public Differentiator(string userName, string accountName, string accountKey, string targetFolder)
+        public Indexer(string userName, string accountName, string accountKey, string targetFolder)
         {
             this._accountName = accountName;
             this._accountKey = accountKey;

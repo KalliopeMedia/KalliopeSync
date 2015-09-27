@@ -16,6 +16,7 @@ namespace KalliopeSync.Console
         static bool simulate = false;
         static bool showHelp;
         static bool fullThrottle = false;
+        static string moveall = "";
 
         public static void Main(string[] args)
         {
@@ -49,7 +50,11 @@ namespace KalliopeSync.Console
                     {
                         "f|fullthrottle=", "By default true, uploads as fast as it can. If false, breaks down files in 1024byte chunks and give 100 ms break before uploading each chunk",
                         (string s) => simulate = (s != null && (s == "true" || s == "t" || s == "1"))
-                    },                
+                    },
+                    {
+                        "v|moveall=", "Moves all files in root folder to specified folder",
+                        (string s) => moveall = s
+                    },
                     { 
                         "h|help", "Show this message and exit", 
                         h => showHelp = h != null 
@@ -83,7 +88,7 @@ namespace KalliopeSync.Console
                     downloader.SimulationMode = simulate;
                     downloader.DownloadAll(output, result);
 
-                    Differentiator differ = new Differentiator(container, accountName, accountKey, output);
+                    Indexer differ = new Indexer(container, accountName, accountKey, output);
 
                     var uploadList = differ.CreateUploadList(output);
 
@@ -91,6 +96,9 @@ namespace KalliopeSync.Console
                     uploader.SimulationMode = simulate;
                     uploader.FullThrottle = fullThrottle;
                     uploader.Upload(output, uploadList);
+
+                    VirtualFileSystem vfs = new VirtualFileSystem(accountName, accountKey, container);
+                    vfs.Move(moveall);
                 }
             }
             catch (Exception ex)
