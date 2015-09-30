@@ -32,36 +32,32 @@ namespace KalliopeSync.Core.Full
             CloudBlobContainer container = blobClient.GetContainerReference(_containerName);
 
             Console.WriteLine("Processing Move...");
-            Logging.Logger.Info("Processing Moving--------------------");
+            Logging.Logger.Info("Processing Move--------------------");
 
-            Dictionary<string, CloudBlockBlob> deleteItems = new Dictionary<string, CloudBlockBlob>();
+            List<CloudBlockBlob> deleteItems = new List<CloudBlockBlob>();
+            List<Task> copyTasks = new List<Task>();
             foreach (IListBlobItem item in container.ListBlobs(null, true))
             {
                 if (item.GetType() == typeof(CloudBlockBlob))
                 {
                     CloudBlockBlob blob = (CloudBlockBlob)item;
+                    deleteItems.Add(blob);
                     var targetBlob = container.GetBlobReference(Path.Combine(target, blob.Name));
-                    Task<string> copy = targetBlob.StartCopyAsync(blob.Uri);
-                    Logging.Logger.Info(string.Format("Beginning Move {0} to {1}", blob.Name, targetBlob.Name));
-                    Console.WriteLine(string.Format("Beginning Move {0} to {1}", blob.Name, targetBlob.Name));
-                    copy.ContinueWith((Task<string> returnValue) =>
-                        {
-                            if(returnValue.Status == TaskStatus.RanToCompletion)
-                            {
-                                Logging.Logger.Info(string.Format("Moved {0} to {1}: {2}", blob.Name, targetBlob.Name, returnValue.Result));
-                                Console.WriteLine(string.Format("Moved {0} to {1}: {2}", blob.Name, targetBlob.Name, returnValue.Result));
-                                blob.Delete(DeleteSnapshotsOption.IncludeSnapshots);
-                                deleteItems.Add(blob.Name, blob);
-                            }
-                        });
+                    copyTasks.Add(targetBlob.StartCopyAsync(blob.Uri));
                 }
             }
+            Console.WriteLine("Initiated Copy");
+            Task.WhenAll(copyTasks.ToArray()).ContinueWith( (Task arg) => {
+
+            Console.WriteLine("Completed Copy... starting delete");
+                    foreach (CloudBlockBlob item in deleteItems)
+                    {
+                        item.Delete();
+                    }
+            }).Wait();
+            Logging.Logger.Info(string.Format("Completed Move All"));
+            Console.WriteLine(string.Format("Completed Copy All"));
             Console.ReadLine();
-            //foreach (var deleteItem in deleteItems)
-            //{
-                //Logging.Logger.Info(string.Format("Deleting {0} ", deleteItem.Value.Name));
-                //Console.WriteLine(string.Format("Deleting {0} ", deleteItem.Value.Name));
-            //}
             return true;
         }
     }
