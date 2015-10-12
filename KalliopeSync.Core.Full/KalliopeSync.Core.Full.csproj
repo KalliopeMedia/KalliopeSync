@@ -62,6 +62,7 @@
     <Compile Include="Uploader.cs" />
     <Compile Include="Indexer.cs" />
     <Compile Include="VirtualFileSystem.cs" />
+    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

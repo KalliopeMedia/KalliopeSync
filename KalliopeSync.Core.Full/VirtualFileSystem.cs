@@ -42,19 +42,22 @@ namespace KalliopeSync.Core.Full
                 {
                     CloudBlockBlob blob = (CloudBlockBlob)item;
                     deleteItems.Add(blob);
-                    var targetBlob = container.GetBlobReference(Path.Combine(target, blob.Name));
+                    string targetBlobName = Path.Combine(target, blob.Name);
+                    var targetBlob = container.GetBlobReference(targetBlobName);
+                    Logging.Logger.Info(string.Format("Copying file {0} at {1}", targetBlobName, targetBlob.Uri));
                     copyTasks.Add(targetBlob.StartCopyAsync(blob.Uri));
                 }
             }
             Console.WriteLine("Initiated Copy");
-            Task.WhenAll(copyTasks.ToArray()).ContinueWith( (Task arg) => {
-
-            Console.WriteLine("Completed Copy... starting delete");
+            Task.WhenAll(copyTasks.ToArray()).ContinueWith((Task arg) =>
+                {
+                    Console.WriteLine("Completed Copy... starting delete");
                     foreach (CloudBlockBlob item in deleteItems)
                     {
+                        Logging.Logger.Info(string.Format("Deleting file at {0}", item.Uri));
                         item.Delete();
                     }
-            }).Wait();
+                }).Wait();
             Logging.Logger.Info(string.Format("Completed Move All"));
             Console.WriteLine(string.Format("Completed Copy All"));
             Console.ReadLine();

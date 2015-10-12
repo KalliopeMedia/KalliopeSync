@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Core.Full", "K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Logging", "KalliopeSync.Logging\KalliopeSync.Logging.csproj", "{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Tests", "KalliopeSync.Tests\KalliopeSync.Tests.csproj", "{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,6 +27,10 @@ Global
 		{B1994169-FA3A-4F05-8F45-67A9B8B5DBB6}.Debug|x86.Build.0 = Debug|x86
 		{B1994169-FA3A-4F05-8F45-67A9B8B5DBB6}.Release|x86.ActiveCfg = Release|x86
 		{B1994169-FA3A-4F05-8F45-67A9B8B5DBB6}.Release|x86.Build.0 = Release|x86
+		{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

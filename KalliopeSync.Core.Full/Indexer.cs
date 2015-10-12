@@ -46,12 +46,9 @@ namespace KalliopeSync.Core.Full
 
         public IEnumerable<FileInfo> CreateUploadList(string targetFolder)
         {
-
             CloudBlobClient blobClient = _storageAccount.CreateCloudBlobClient();
-
             CloudBlobContainer container = blobClient.GetContainerReference(_containerName);
 
-            //            int currentCount = 0;
             foreach (IListBlobItem item in container.ListBlobs(null, true))
             {
                 CloudBlockBlob blob = (CloudBlockBlob)item;
@@ -60,9 +57,7 @@ namespace KalliopeSync.Core.Full
             }
 
             GetLocalRepository(targetFolder);
-
             var uploadList = new List<FileInfo>();
-
 
             Console.WriteLine("Creating Upload List");
             Logging.Logger.Info("Creating Upload List");
