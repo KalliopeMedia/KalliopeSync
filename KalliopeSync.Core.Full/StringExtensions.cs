@@ -13,8 +13,9 @@ namespace KalliopeSync.Core.Full
         /// <returns><c>true</c> if the string matches the given pattern; otherwise <c>false</c>.</returns>
         public static bool Like(this string str, string pattern)
         {
+            string regex = Regex.Escape(pattern).Replace(@"\*", ".*").Replace(@"\?", ".") + "$";
             return new Regex(
-                "^" + Regex.Escape(pattern).Replace(@"\*", ".*").Replace(@"\?", ".") + "$",
+                regex,
                 RegexOptions.IgnoreCase | RegexOptions.Singleline
             ).IsMatch(str);
         }
