@@ -88,7 +88,9 @@ namespace KalliopeSync.Console
                     downloader.SimulationMode = simulate;
                     downloader.DownloadAll(output, result);
 
+                    System.Console.WriteLine("Indexing");
                     Indexer differ = new Indexer(container, accountName, accountKey, output);
+                    System.Console.WriteLine("Indexing Complete");
 
                     var uploadList = differ.CreateUploadList(output);
 
@@ -97,8 +99,11 @@ namespace KalliopeSync.Console
                     uploader.FullThrottle = fullThrottle;
                     uploader.Upload(output, uploadList);
 
-                    VirtualFileSystem vfs = new VirtualFileSystem(accountName, accountKey, container);
-                    vfs.Move(moveall);
+                    if(!string.IsNullOrEmpty(moveall))
+                    {
+                        VirtualFileSystem vfs = new VirtualFileSystem(accountName, accountKey, container);
+                        vfs.Move(moveall);
+                    }
                 }
             }
             catch (Exception ex)

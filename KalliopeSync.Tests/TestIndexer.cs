@@ -14,19 +14,23 @@ namespace KalliopeSync.Tests
                 @"/home/sumitkm/myprojects/github/kalliopesync.suo",
                 @"/home/sumitkm/myprojects/github/kalliopesync/.gitignore",
                 @"/Downloads/en_windows_8.1_enterprise_with_update_x64_dvd_6054382.iso",
-                @"/Downloads/DSC_3315.JPG"
+                @"/Downloads/DSC_3315.JPG",
+                @"/home/sumitkm/.Xauthority",
+                @"/home/sumitkm/.bash_history"
             };
 
         string [] fileIsIncludedList = new string[]
             {
                 @"/Downloads/DSC_3315.JPG",
-                @"/home/sumitkm/myprojects/github/kalliopesync/.gitignore",
             };
 
         string [] fileIsExcludedList = new string[]
             {
+                @"/home/sumitkm/myprojects/github/kalliopesync/.gitignore",                                
                 @"/home/sumitkm/myprojects/github/kalliopesync.suo",
                 @"/Downloads/en_windows_8.1_enterprise_with_update_x64_dvd_6054382.iso",
+                @"/home/sumitkm/.Xauthority",
+                @"/home/sumitkm/.bash_history"
             };
 
 
@@ -42,12 +46,12 @@ namespace KalliopeSync.Tests
                 @"/home/sumitkm/Templates/",
                 @"/home/sumitkm/Videos/",
                 @"/home/sumitkm/VirtualBox VMs/",
+                @"/home/sumitkm/.atom/",
             };
         
         string [] folderIsIncludedList = new string[]
             {
                 @"/home/sumitkm/Desktop",
-                @"/home/sumitkm/Documents",
                 @"/home/sumitkm/Downloads",
                 @"/home/sumitkm/myprojects",
                 @"/home/sumitkm/Pictures",
@@ -58,30 +62,43 @@ namespace KalliopeSync.Tests
 
         string [] folderIsExcludedList = new string[]
             {
+                @"/home/sumitkm/Documents",
                 @"/home/sumitkm/myprojects/github",
                 @"/home/sumitkm/VirtualBox VMs",
+                @"/home/sumitkm/.atom/",                                
             };
         
         string [] patterns = new string[]
             {
+                ".*/",
                 "downloads/",
                 "github/",
                 "virtualBox vms/",
                 "*.iso",
-                "*.suo"
+                "*.suo",
+                "/.*"
             };
 
         [TestFixtureSetUp]
         public void SetupIndexerTest()
         {
-            Console.WriteLine("----------------------------------------------");
+            Console.WriteLine("----------------- START -----------------------");
+            string fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".kpsignore");
+            System.IO.File.WriteAllLines(fileName, patterns);
+        }
 
+        [TestFixtureTearDown]
+        public void TearDownIndexerTest()
+        {
+            Console.WriteLine("-------------------END------------------------");
+            string fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".kpsignore");
+            System.IO.File.Delete(fileName);
         }
 
         [Test()]
         public void IsFileExcludedTest()
         {
-            var idxr = new Indexer("","","","");
+            var idxr = new Indexer("","","",AppDomain.CurrentDomain.BaseDirectory);
             List<string> excludedList = new List<string>();   
 
             for (int j = 0; j < files.Length; j++)
@@ -99,7 +116,7 @@ namespace KalliopeSync.Tests
         [Test()]
         public void IsFileIncludedTest()
         {
-            var idxr = new Indexer("","","","");
+            var idxr = new Indexer("","","",AppDomain.CurrentDomain.BaseDirectory);
             List<string> includedList = new List<string>();   
 
             for (int j = 0; j < files.Length; j++)
@@ -119,13 +136,13 @@ namespace KalliopeSync.Tests
         [Test()]
         public void IsFolderExcludedTest()
         {
-            var idxr = new Indexer("","","","");
+            var idxr = new Indexer("","","",AppDomain.CurrentDomain.BaseDirectory);
             List<string> excludedList = new List<string>();   
 
             for (int j = 0; j < folders.Length; j++)
             {
                 string fileName = folders[j];           
-                if (!idxr.IsFileIncluded(fileName, patterns))
+                if (!idxr.IsFolderIncluded(fileName, patterns))
                 {
                     Console.WriteLine("Folder Excluded: {0}", fileName);
                     excludedList.Add(fileName);
@@ -138,13 +155,13 @@ namespace KalliopeSync.Tests
         [Test()]
         public void IsFolderIncludedTest()
         {
-            var idxr = new Indexer("","","","");
+            var idxr = new Indexer("","","",AppDomain.CurrentDomain.BaseDirectory);
             List<string> includedList = new List<string>();   
 
             for (int j = 0; j < folders.Length; j++)
             {
                 string fileName = folders[j];
-                if (idxr.IsFileIncluded(fileName, patterns))
+                if (idxr.IsFolderIncluded(fileName, patterns))
                 {
                     Console.WriteLine("Folder Included: {0}", fileName);
 
@@ -157,13 +174,9 @@ namespace KalliopeSync.Tests
         [Test()]
         public void ReadPatternsFileTest()
         {
-            string fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".kpsignore");
-            System.IO.File.WriteAllLines(fileName, patterns);
-            var idxr = new Indexer("", "", "", "");
+            var idxr = new Indexer("", "", "", AppDomain.CurrentDomain.BaseDirectory);
             var newPatterns = idxr.LoadPatterns(AppDomain.CurrentDomain.BaseDirectory);
-            System.IO.File.Delete(fileName);
             Assert.AreEqual(patterns.Length, newPatterns.Length);
-                
         }
 
         [Test()]

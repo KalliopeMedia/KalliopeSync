@@ -44,12 +44,11 @@ namespace KalliopeSync.Core.Full
             this._patterns = LoadPatterns(targetFolder);
         }
 
-        private string GetBlobReferenceName(string fullFileName, string targetFolder)
+        public string GetBlobReferenceName(string fullFileName, string targetFolder)
         {
             string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "").Replace(@"\",@"/");
             return blobReferenceName;
         }
-
 
         public IEnumerable<FileInfo> CreateUploadList(string targetFolder)
         {
@@ -92,38 +91,62 @@ namespace KalliopeSync.Core.Full
             return uploadList;
         }
 
-        private IEnumerable<CloudBlockBlob> CreateDeleteList()
+        public IEnumerable<CloudBlockBlob> CreateDeleteList()
         {
             return null;
         }
 
-
-        private Dictionary<string, FileInfo> GetLocalRepository(string folderName, Dictionary<string, FileInfo> localRepository )
+        public Dictionary<string, FileInfo> GetLocalRepository(string folderName, Dictionary<string, FileInfo> localRepository )
         {            
             if (localRepository == null)
             {
                 localRepository = new Dictionary<string, FileInfo>();
             }
-            if (IsFileIncluded(folderName, _patterns))
+            if (IsFolderIncluded(folderName, _patterns))
             {
                 var directoryInfoList = Directory.EnumerateDirectories(folderName);
                 foreach (var directory in directoryInfoList)
                 {
-                    GetLocalRepository(directory, localRepository);
+                    localRepository = GetLocalRepository(directory, localRepository);
                 }
                 var filesList = Directory.EnumerateFiles(folderName);
                 foreach (var file in filesList)
                 {
-                    if (IsFileIncluded(folderName, _patterns))
+                    if (IsFileIncluded(file, _patterns))
                     {
                         localRepository.Add(file, new FileInfo(file));
                         Logging.Logger.Info(string.Format("Added File to Repo: {0}", file));
                     }
-                }    
+                    else
+                    {
+                        Logging.Logger.Info(string.Format("Skipped File: {0}", file));
+                    }
+                }
+            }
+            else
+            {
+                Logging.Logger.Info(string.Format("Skipped Folder: {0}", folderName));
             }
             return localRepository;
         }
 
+        public bool IsFolderIncluded(string folderName, string [] patterns)
+        {
+            bool isExcluded = false;
+            if (!folderName.EndsWith(@"/"))
+            {
+                folderName += @"/";
+            }
+            for (int i = 0; i < patterns.Length; i++)
+            {
+                if (folderName.Like(patterns[i]))
+                {
+                    isExcluded = true;
+                    break;
+                }
+            }
+            return !isExcluded;
+        }
 
         public bool IsFileIncluded(string fileName, string [] patterns)
         {
@@ -142,6 +165,12 @@ namespace KalliopeSync.Core.Full
         public string []  LoadPatterns(string directory)
         {
             List<string> patterns = new List<string>(System.IO.File.ReadLines(Path.Combine(directory, ".kpsignore")));
+            string message = "Patterns used: ";
+            patterns.ForEach((string s) =>
+                {
+                    message += s + ",";
+                });
+            Logging.Logger.Info(message.TrimEnd(','), null);
             return patterns.ToArray();
         }
     }
