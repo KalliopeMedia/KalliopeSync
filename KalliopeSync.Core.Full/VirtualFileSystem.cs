@@ -63,6 +63,7 @@ namespace KalliopeSync.Core.Full
             Console.ReadLine();
             return true;
         }
+
     }
 }
 

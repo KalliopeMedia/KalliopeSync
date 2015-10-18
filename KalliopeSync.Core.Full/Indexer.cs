@@ -17,7 +17,7 @@ namespace KalliopeSync.Core.Full
         private readonly string _containerName;
         private readonly CloudStorageAccount _storageAccount;
         private readonly Dictionary<string, CloudBlockBlob> _cloudRepository;
-        private readonly Dictionary<string, FileInfo> _localRepository;
+        private readonly string[] _patterns;
 
         public bool SimulationMode
         {
@@ -31,10 +31,17 @@ namespace KalliopeSync.Core.Full
             this._accountKey = accountKey;
             this._containerName = userName;
             this._cloudRepository = new Dictionary<string, CloudBlockBlob>();
-            this._localRepository = new Dictionary<string, FileInfo>();
 
-            var cloudConnectionString = string.Format ("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", _accountName, _accountKey);
-            _storageAccount = CloudStorageAccount.Parse(cloudConnectionString);
+            if (accountName == "" || accountKey == "")
+            {
+                _storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
+            }
+            else
+            {
+                var cloudConnectionString = string.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", _accountName, _accountKey);
+                _storageAccount = CloudStorageAccount.Parse(cloudConnectionString);
+            }
+            this._patterns = LoadPatterns(targetFolder);
         }
 
         private string GetBlobReferenceName(string fullFileName, string targetFolder)
@@ -56,13 +63,14 @@ namespace KalliopeSync.Core.Full
                 _cloudRepository[blob.Name] = blob;
             }
 
-            GetLocalRepository(targetFolder);
+            var localRepository = GetLocalRepository(targetFolder, null);
             var uploadList = new List<FileInfo>();
 
             Console.WriteLine("Creating Upload List");
             Logging.Logger.Info("Creating Upload List");
 
-            foreach (var item in _localRepository)
+
+            foreach (var item in localRepository)
             {
                 string blobReferenceName = GetBlobReferenceName(item.Value.FullName, targetFolder);
                 if (!_cloudRepository.ContainsKey(blobReferenceName))
@@ -90,19 +98,51 @@ namespace KalliopeSync.Core.Full
         }
 
 
-        private void GetLocalRepository(string folderName)
-        {
-            var directoryInfoList = Directory.EnumerateDirectories(folderName);
-            foreach (var directory in directoryInfoList)
+        private Dictionary<string, FileInfo> GetLocalRepository(string folderName, Dictionary<string, FileInfo> localRepository )
+        {            
+            if (localRepository == null)
             {
-                GetLocalRepository(directory);
+                localRepository = new Dictionary<string, FileInfo>();
             }
-            var filesList = Directory.EnumerateFiles(folderName);
-            foreach (var file in filesList)
+            if (IsFileIncluded(folderName, _patterns))
             {
-                _localRepository.Add(file, new FileInfo(file));
-                Logging.Logger.Info(string.Format("Added File to Repo: {0}", file));
-            }                
+                var directoryInfoList = Directory.EnumerateDirectories(folderName);
+                foreach (var directory in directoryInfoList)
+                {
+                    GetLocalRepository(directory, localRepository);
+                }
+                var filesList = Directory.EnumerateFiles(folderName);
+                foreach (var file in filesList)
+                {
+                    if (IsFileIncluded(folderName, _patterns))
+                    {
+                        localRepository.Add(file, new FileInfo(file));
+                        Logging.Logger.Info(string.Format("Added File to Repo: {0}", file));
+                    }
+                }    
+            }
+            return localRepository;
+        }
+
+
+        public bool IsFileIncluded(string fileName, string [] patterns)
+        {
+            bool isExcluded = false;
+            for (int i = 0; i < patterns.Length; i++)
+            {
+                if (fileName.Like(patterns[i]))
+                {
+                    isExcluded = true;
+                    break;
+                }
+            }
+            return !isExcluded;
+        }
+
+        public string []  LoadPatterns(string directory)
+        {
+            List<string> patterns = new List<string>(System.IO.File.ReadLines(Path.Combine(directory, ".kpsignore")));
+            return patterns.ToArray();
         }
     }
 }
