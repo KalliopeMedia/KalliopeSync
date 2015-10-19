@@ -49,11 +49,11 @@ namespace KalliopeSync.Console
                     },
                     {
                         "f|fullthrottle=", "By default true, uploads as fast as it can. If false, breaks down files in 1024byte chunks and give 100 ms break before uploading each chunk",
-                        (string s) => simulate = (s != null && (s == "true" || s == "t" || s == "1"))
+                        (string f) => fullThrottle = (f != null && (f == "true" || f == "t" || f == "1"))
                     },
                     {
                         "v|moveall=", "Moves all files in root folder to specified folder",
-                        (string s) => moveall = s
+                        (string v) => moveall = v
                     },
                     { 
                         "h|help", "Show this message and exit", 
@@ -75,14 +75,15 @@ namespace KalliopeSync.Console
                     //int.TryParse(maxCount, out result);
                     result = maxCount;
                     System.Console.WriteLine(
-                        string.Format("Options: \r\n 1-n: {0} \r\n 2-k: {1} \r\n 3-c: {2} \r\n 4-t: {3} \r\n 5-x: {4} \r 6-h: {5}", 
+                        string.Format("Options: \r\n 1-n: {0} \r\n 2-k: {1} \r\n 3-c: {2} \r\n 4-t: {3} \r\n 5-x: {4} \r 6-h: {5}, \r 7-f: {6}", 
                             accountName,
                             accountKey,
                             container,
                             output,
                             result,
                             maxCount,
-                            showHelp));
+                            showHelp,
+                            fullThrottle));
                     Logging.Logger.Info(string.Format("Starting new session id: {0} at {1} :---------------------", sessionId, DateTime.Now.ToLongDateString()));
                     Downloader downloader = new Downloader(container, accountName, accountKey);
                     downloader.SimulationMode = simulate;
@@ -109,7 +110,7 @@ namespace KalliopeSync.Console
             catch (Exception ex)
             {
                 System.Console.WriteLine("Error {0}", ex.Message);
-                Logging.Logger.Error("ERROR: " + ex.Message, ex.InnerException);
+                Logging.Logger.Error(ex.Message, ex);
             }
             finally
             {

@@ -67,10 +67,14 @@ namespace KalliopeSync.Core.Full
             Logging.Logger.Info("Processing Uploads------------------------");
             foreach (var fileInfo in uploadList)
             {
-                string blobReferenceName = GetBlobReferenceName(fileInfo.FullName, targetFolder);
-                var blockBlob = container.GetBlockBlobReference(blobReferenceName);
+                string blobReferenceName = System.Net.WebUtility.HtmlEncode(GetBlobReferenceName(fileInfo.FullName, targetFolder));
+
+                try
+                {
                 if (!SimulationMode)
                 {
+                    var blockBlob = container.GetBlockBlobReference(blobReferenceName);
+
                     using (var fileStream = System.IO.File.OpenRead(fileInfo.FullName))
                     {
                         if (this.FullThrottle)
@@ -97,10 +101,15 @@ namespace KalliopeSync.Core.Full
                             Logging.Logger.Info(string.Format("Uploaded Chunked file: File {0} to Blob Reference {1} of length {2} in {3} chunks", fileInfo.FullName, blobReferenceName, fileStream.Length, id));
                         }
                     }
+                    }
+                    else
+                    {
+                        Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+                    Logging.Logger.Error(string.Format("Failed to upload: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName), ex);
                 }
             }
             Console.WriteLine("Processing Uploads COMPLETE");

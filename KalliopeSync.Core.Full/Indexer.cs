@@ -59,7 +59,7 @@ namespace KalliopeSync.Core.Full
             {
                 CloudBlockBlob blob = (CloudBlockBlob)item;
                 Logging.Logger.Info(string.Format("Cloud List: Blob Name '{0}'", blob.Name));
-                _cloudRepository[blob.Name] = blob;
+                _cloudRepository[System.Net.WebUtility.HtmlDecode(blob.Name)] = blob;
             }
 
             var localRepository = GetLocalRepository(targetFolder, null);
@@ -81,7 +81,7 @@ namespace KalliopeSync.Core.Full
                 {
                     if (item.Value.Length != _cloudRepository[blobReferenceName].Properties.Length)
                     {
-                        Logging.Logger.Info(string.Format("Added File to UploadList (changed): {0}, cloud {1}, local {2}", blobReferenceName, _cloudRepository[item.Value.Name].Properties.Length, item.Value.Length));
+                        Logging.Logger.Info(string.Format("Added File to UploadList (changed): {0}, cloud {1}, local {2}", blobReferenceName, _cloudRepository[blobReferenceName].Properties.Length, item.Value.Length));
                         uploadList.Add(item.Value);
                     }
                 }
