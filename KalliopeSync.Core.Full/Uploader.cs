@@ -67,7 +67,7 @@ namespace KalliopeSync.Core.Full
             Logging.Logger.Info("Processing Uploads------------------------");
             foreach (var fileInfo in uploadList)
             {
-                string blobReferenceName = System.Net.WebUtility.HtmlEncode(GetBlobReferenceName(fileInfo.FullName, targetFolder));
+                string blobReferenceName = GetBlobReferenceName(fileInfo.FullName, targetFolder);
 
                 try
                 {
@@ -125,7 +125,7 @@ namespace KalliopeSync.Core.Full
         private string GetBlobReferenceName(string fullFileName, string targetFolder)
         {
             string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "").Replace(@"\",@"/");
-            return blobReferenceName;
+            return System.Net.WebUtility.UrlEncode(blobReferenceName);
         }       
     }
 }

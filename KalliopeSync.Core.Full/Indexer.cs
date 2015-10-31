@@ -47,7 +47,7 @@ namespace KalliopeSync.Core.Full
         public string GetBlobReferenceName(string fullFileName, string targetFolder)
         {
             string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "").Replace(@"\",@"/");
-            return blobReferenceName;
+            return System.Net.WebUtility.UrlEncode(blobReferenceName);
         }
 
         public IEnumerable<FileInfo> CreateUploadList(string targetFolder)
@@ -59,7 +59,7 @@ namespace KalliopeSync.Core.Full
             {
                 CloudBlockBlob blob = (CloudBlockBlob)item;
                 Logging.Logger.Info(string.Format("Cloud List: Blob Name '{0}'", blob.Name));
-                _cloudRepository[System.Net.WebUtility.HtmlDecode(blob.Name)] = blob;
+                _cloudRepository[System.Net.WebUtility.UrlDecode(blob.Name)] = blob;
             }
 
             var localRepository = GetLocalRepository(targetFolder, null);

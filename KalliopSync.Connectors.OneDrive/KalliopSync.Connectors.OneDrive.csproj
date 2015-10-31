@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}</ProjectGuid>
+    <ProjectGuid>{2BE566A8-2879-40D8-B094-42D4C99D021F}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KalliopeSync.Tests</RootNamespace>
-    <AssemblyName>KalliopeSync.Tests</AssemblyName>
+    <RootNamespace>KalliopSync.Connectors.OneDrive</RootNamespace>
+    <AssemblyName>KalliopSync.Connectors.OneDrive</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,34 +29,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\TestIndexer.cs" />
-    <Compile Include="Db\TestDbProvider.cs" />
+    <Compile Include="MyClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\KalliopeSync.Core.Full\KalliopeSync.Core.Full.csproj">
-      <Project>{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}</Project>
-      <Name>KalliopeSync.Core.Full</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KalliopeSync.Db\KalliopeSync.Db.csproj">
-      <Project>{FE093575-49D6-4D6F-8EAF-6650F5028D98}</Project>
-      <Name>KalliopeSync.Db</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KalliopeSync.Logging\KalliopeSync.Logging.csproj">
-      <Project>{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}</Project>
-      <Name>KalliopeSync.Logging</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\" />
-    <Folder Include="Db\" />
-  </ItemGroup>
 </Project>

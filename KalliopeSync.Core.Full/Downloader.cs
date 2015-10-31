@@ -40,18 +40,17 @@ namespace KalliopeSync.Core.Full
 
             int currentCount = 0;
             Console.WriteLine("Processing Downloads...");
-            Logging.Logger.Info("Processing Downloads--------------------");
+            Logging.Logger.Info(string.Format("Processing Downloads-------------------- Account: {0} ; Key: {1} ; Container: {2}", _accountName, _accountKey, _containerName));
 
-            foreach (IListBlobItem item in container.ListBlobs(null, false))
-            {
+            foreach (IListBlobItem item in container.ListBlobs(null, true))
+            {   
                 if (item.GetType() == typeof(CloudBlockBlob))
                 {
                     CloudBlockBlob blob = (CloudBlockBlob)item;
 
                     if (currentCount < maxCount || maxCount == -1)
                     {
-                        DownloadBlob(blob, targetFolder);
-                        currentCount++;
+                        currentCount = DownloadBlob(blob, targetFolder, currentCount);
                     }
                     else
                     {
@@ -75,9 +74,10 @@ namespace KalliopeSync.Core.Full
 
         }
 
-        private void DownloadBlob(CloudBlockBlob blockBlob, string targetFolder)
+        private int DownloadBlob(CloudBlockBlob blockBlob, string targetFolder, int currentCount)
         {
-            string targetFileName = Path.Combine(targetFolder, blockBlob.Name);
+            string targetFileName = string.Format("{0}{1}{2}", targetFolder, Path.DirectorySeparatorChar.ToString(), blockBlob.Name.TrimStart(Path.DirectorySeparatorChar));
+            Logging.Logger.Info(string.Format("Target Folder: {0} Target file: {1} ", targetFolder, targetFileName));
 
             string tempName = Path.Combine(targetFolder, Guid.NewGuid() + blockBlob.Name);
             if (!File.Exists(targetFileName))
@@ -90,6 +90,7 @@ namespace KalliopeSync.Core.Full
                         blockBlob.DownloadToStream(fileStream);
                     }
                     File.SetCreationTime(targetFileName, blockBlob.Properties.LastModified.Value.DateTime);
+                    currentCount++;
                 }
                 else
                 {
@@ -110,6 +111,7 @@ namespace KalliopeSync.Core.Full
                         }
                         File.Delete(targetFileName);
                         File.Move(tempName, targetFileName);
+                        currentCount++;
                         File.SetCreationTime(targetFileName, blockBlob.Properties.LastModified.Value.DateTime);
                     }
                     else
@@ -122,6 +124,7 @@ namespace KalliopeSync.Core.Full
                     Logging.Logger.Info(string.Format("Local file size: {0}, online file size: {1} - Skipping...", info.Length, blockBlob.Properties.Length));
                 }
             }
+            return currentCount;
         }
     }
 }

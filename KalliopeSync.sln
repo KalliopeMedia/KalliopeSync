@@ -9,12 +9,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Logging", "Kal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Tests", "KalliopeSync.Tests\KalliopeSync.Tests.csproj", "{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopSync.Connectors.OneDrive", "KalliopSync.Connectors.OneDrive\KalliopSync.Connectors.OneDrive.csproj", "{2BE566A8-2879-40D8-B094-42D4C99D021F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Db", "KalliopeSync.Db\KalliopeSync.Db.csproj", "{FE093575-49D6-4D6F-8EAF-6650F5028D98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BE566A8-2879-40D8-B094-42D4C99D021F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2BE566A8-2879-40D8-B094-42D4C99D021F}.Debug|x86.Build.0 = Debug|Any CPU
+		{2BE566A8-2879-40D8-B094-42D4C99D021F}.Release|x86.ActiveCfg = Release|Any CPU
+		{2BE566A8-2879-40D8-B094-42D4C99D021F}.Release|x86.Build.0 = Release|Any CPU
 		{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}.Debug|x86.Build.0 = Debug|Any CPU
 		{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}.Release|x86.ActiveCfg = Release|Any CPU
@@ -31,6 +39,10 @@ Global
 		{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}.Debug|x86.Build.0 = Debug|Any CPU
 		{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF3669E1-2A3D-41D3-BCD8-8E90B6241BC7}.Release|x86.Build.0 = Release|Any CPU
+		{FE093575-49D6-4D6F-8EAF-6650F5028D98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FE093575-49D6-4D6F-8EAF-6650F5028D98}.Debug|x86.Build.0 = Debug|Any CPU
+		{FE093575-49D6-4D6F-8EAF-6650F5028D98}.Release|x86.ActiveCfg = Release|Any CPU
+		{FE093575-49D6-4D6F-8EAF-6650F5028D98}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

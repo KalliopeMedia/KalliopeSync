@@ -4,13 +4,14 @@ using System.IO;
 using System.Collections.Generic;
 using KalliopeSync.Core.Full;
 
-namespace KalliopeSync.Tests
+namespace KalliopeSync.Tests.Core
 {
     [TestFixture()]
     public class TestIndexer
     {
         string [] files = new string []
             {
+                @"/home/sumitkm/mymusic/kalliope'sync.mp3",                                
                 @"/home/sumitkm/myprojects/github/kalliopesync.suo",
                 @"/home/sumitkm/myprojects/github/kalliopesync/.gitignore",
                 @"/Downloads/en_windows_8.1_enterprise_with_update_x64_dvd_6054382.iso",
@@ -21,6 +22,7 @@ namespace KalliopeSync.Tests
 
         string [] fileIsIncludedList = new string[]
             {
+                @"/home/sumitkm/mymusic/kalliope'sync.mp3",                                
                 @"/Downloads/DSC_3315.JPG",
             };
 
