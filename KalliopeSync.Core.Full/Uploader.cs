@@ -125,7 +125,7 @@ namespace KalliopeSync.Core.Full
         private string GetBlobReferenceName(string fullFileName, string targetFolder)
         {
             string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "").Replace(@"\",@"/");
-            return System.Net.WebUtility.UrlEncode(blobReferenceName);
+            return System.Net.WebUtility.HtmlEncode(blobReferenceName);
         }       
     }
 }

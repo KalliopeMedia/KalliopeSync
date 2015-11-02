@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Core\TestIndexer.cs" />
     <Compile Include="Db\TestDbProvider.cs" />
+    <Compile Include="Db\TestSyncItemService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

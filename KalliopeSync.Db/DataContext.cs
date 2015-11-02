@@ -16,6 +16,12 @@ namespace KalliopeSync.Db
             get;
             set;
         }
+
+        public SyncItemServices SyncItemService
+        {
+            get;
+            set;
+        }
     }
 }
 

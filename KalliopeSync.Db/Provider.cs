@@ -106,6 +106,10 @@ namespace KalliopeSync.Db
             return true;
         }
 
+        /// <summary>
+        /// Creates a new connection using the Provider details
+        /// </summary>
+        /// <returns>The a SqliteConnection instance</returns>
         public SqliteConnection GetConnection()
         {
             return new SqliteConnection(ConnectionString);
