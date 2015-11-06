@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KalliopeSync.Core.Full</RootNamespace>
+    <RootNamespace>KalliopeSync.Core</RootNamespace>
     <AssemblyName>KalliopeSync.Core.Full</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -63,6 +63,13 @@
     <Compile Include="Indexer.cs" />
     <Compile Include="VirtualFileSystem.cs" />
     <Compile Include="StringExtensions.cs" />
+
+    <Compile Include="Services\Downloader.cs" />
+    <Compile Include="Services\Indexer.cs" />
+    <Compile Include="Services\Uploader.cs" />
+    <Compile Include="Services\VirtualFileSystem.cs" />
+    <Compile Include="Models\SyncItem.cs" />
+
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -74,5 +81,9 @@
       <Project>{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}</Project>
       <Name>KalliopeSync.Logging</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

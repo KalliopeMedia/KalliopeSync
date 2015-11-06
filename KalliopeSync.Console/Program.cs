@@ -2,7 +2,7 @@
 using System.IO;
 using Mono.Options;
 using System.Diagnostics;
-using KalliopeSync.Core.Full;
+using KalliopeSync.Core.Services;
 
 namespace KalliopeSync.Console
 {

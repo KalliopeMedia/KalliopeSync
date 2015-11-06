@@ -40,10 +40,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\KalliopeSync.Core.Full\KalliopeSync.Core.Full.csproj">
-      <Project>{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}</Project>
-      <Name>KalliopeSync.Core.Full</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KalliopeSync.Db\KalliopeSync.Db.csproj">
       <Project>{FE093575-49D6-4D6F-8EAF-6650F5028D98}</Project>
       <Name>KalliopeSync.Db</Name>

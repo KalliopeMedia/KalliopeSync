@@ -8,7 +8,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Auth;
 
-namespace KalliopeSync.Core.Full
+namespace KalliopeSync.Core.Services
 {
     public class Uploader
     {
