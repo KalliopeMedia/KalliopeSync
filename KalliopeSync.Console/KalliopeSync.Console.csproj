@@ -46,6 +46,10 @@
       <Project>{7AEDC4E3-4A84-4D7C-9083-C8AC4ECFEB40}</Project>
       <Name>KalliopeSync.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KalliopeSync.Core.Full\KalliopeSync.Core.Full.csproj">
+      <Project>{A4E2F1E7-C583-43E7-AAB6-C733E6F8B3CB}</Project>
+      <Name>KalliopeSync.Core.Full</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

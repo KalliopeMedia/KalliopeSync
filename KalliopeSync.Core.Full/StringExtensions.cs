@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace KalliopeSync.Core.Full
+namespace KalliopeSync.Core
 {
     public static class StringExtensions
     {
