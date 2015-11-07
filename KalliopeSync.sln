@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopSync.Connectors.OneD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Db", "KalliopeSync.Db\KalliopeSync.Db.csproj", "{FE093575-49D6-4D6F-8EAF-6650F5028D98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.Gtk", "KalliopeSync.Gtk\KalliopeSync.Gtk.csproj", "{6B287FF5-36D2-42BA-BA3B-E2E9657BAD1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KalliopeSync.View", "KalliopeSync.Gtk\KalliopeSync.View.csproj", "{6B287FF5-36D2-42BA-BA3B-E2E9657BAD1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

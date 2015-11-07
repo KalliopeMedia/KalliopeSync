@@ -1,7 +1,7 @@
 ﻿using System;
 using Gtk;
 
-namespace KalliopeSync.Gtk
+namespace KalliopeSync.View
 {
     class MainClass
     {

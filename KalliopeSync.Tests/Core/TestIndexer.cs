@@ -2,7 +2,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using KalliopeSync.Core.Full;
+using KalliopeSync.Core;
+using KalliopeSync.Core.Services;
 
 namespace KalliopeSync.Tests.Core
 {

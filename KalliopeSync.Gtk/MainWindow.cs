@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-using KalliopeSync.Core.Models;
+using KalliopeSync.View;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -11,41 +11,49 @@ public partial class MainWindow: Gtk.Window
         : base(Gtk.WindowType.Toplevel)
     {
         Build();
-//        List<List<SyncItem>> items = new List<List<SyncItem>>();
-//        for (int i = 0; i < 100; i++)
-//        {
-            List<SyncItem> subitems = new List<SyncItem>();
-            for (int j = 0; j < 5; j++) 
+        List<SyncItem> subitems = new List<SyncItem>();
+        for (int j = 0; j < 5; j++)
+        {
+            SyncItem item = new SyncItem
             {
-                SyncItem item = new SyncItem
+                Name = string.Format("FileItem 0 - {0}", j),
+                FileKey = string.Format("/file/path/0/{0}", j)
+            };
+            for (int i = 0; i < 5; i++)
+            {
+                SyncItem subItem = new SyncItem
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = string.Format("FileItem {0} - {1}", j, j),
-                        Path = string.Format("/file/path/{0}/{1}", j, j)
-                    };
-                subitems.Add(item);
+                        Name = string.Format("FileItem {0} - {1}", j, i),
+                        FileKey = item.FileKey + string.Format("{0}", i)
+                    };      
+                item.ChildItems.Add(subItem);
             }
-//            items.Add(subitems);
-//        }
-        Gtk.TreeStore syncItems = new Gtk.TreeStore(typeof (SyncItem));
+
+            subitems.Add(item);
+        }
+
+        Gtk.TreeStore syncItems = new Gtk.TreeStore(typeof(SyncItem));
         for (int i = 0; i < subitems.Count; i++)
         {
-            Gtk.TreeIter iter = syncItems.AppendValues (subitems[i]);
+            var iter = syncItems.AppendValues(subitems[i]);
+            for (int j = 0; j < subitems[i].ChildItems.Count; j++) {
+                syncItems.AppendValues(iter, subitems[i].ChildItems[j]);
+            }
         }
         Gtk.TreeViewColumn folderNameColumn = new TreeViewColumn();
         folderNameColumn.Title = "Folders";
-        Gtk.CellRendererText folderNameCell = new Gtk.CellRendererText ();
-        folderNameColumn.PackStart (folderNameCell, true);
-        folderNameColumn.SetCellDataFunc (folderNameCell, new Gtk.TreeCellDataFunc (RenderFolderNameCell));
+        Gtk.CellRendererText folderNameCell = new Gtk.CellRendererText();
+        folderNameColumn.PackStart(folderNameCell, true);
+        folderNameColumn.SetCellDataFunc(folderNameCell, new Gtk.TreeCellDataFunc(RenderFolderNameCell));
 
-        this.treeview2.AppendColumn(folderNameColumn);
-        this.treeview2.Model = syncItems;
+        this.SyncLocationTreeView.AppendColumn(folderNameColumn);
+        this.SyncLocationTreeView.Model = syncItems;
 
     }
 
     private void RenderFolderNameCell(Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
     {
-        SyncItem syncItem = (SyncItem) model.GetValue (iter, 0);
+        SyncItem syncItem = (SyncItem)model.GetValue(iter, 0);
         (cell as Gtk.CellRendererText).Text = syncItem.Name;
 
     }
