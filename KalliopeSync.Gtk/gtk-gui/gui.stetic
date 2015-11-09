@@ -15,6 +15,19 @@
         <property name="Label" translatable="yes">File</property>
         <property name="ShortLabel" translatable="yes">File</property>
       </action>
+      <action id="yesAction">
+        <property name="Type">Toggle</property>
+        <property name="Label" translatable="yes">Connect</property>
+        <property name="ShortLabel" translatable="yes">Connect</property>
+        <property name="StockId">gtk-yes</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+      </action>
+      <action id="ConnectAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Connect</property>
+        <property name="ShortLabel" translatable="yes">Connect</property>
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">KalliopeMedia - KalliopeSync</property>
@@ -30,11 +43,29 @@
           <widget class="Gtk.MenuBar" id="menubar3">
             <property name="MemberName" />
             <node name="__gtksharp_181_Stetic_Editor_ActionMenuBar" type="Menubar">
-              <node type="Menu" action="FileAction" />
+              <node type="Menu" action="FileAction">
+                <node type="Menuitem" action="ConnectAction" />
+              </node>
+              <node type="Menu" />
             </node>
           </widget>
           <packing>
             <property name="Position">0</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Toolbar" id="toolbar5">
+            <property name="MemberName" />
+            <property name="ShowArrow">False</property>
+            <node name="__gtksharp_168_Stetic_Editor_ActionToolbar" type="Toolbar">
+              <node type="Toolitem" action="yesAction" />
+            </node>
+          </widget>
+          <packing>
+            <property name="Position">1</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -62,14 +93,56 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.IconView" id="iconview1">
+              <widget class="Gtk.Notebook" id="notebook1">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="CurrentPage">1</property>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
+                    <property name="MemberName" />
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TreeView" id="treeview4">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="HeadersVisible">False</property>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="ViewTypePageHeaderLabel">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">List View</property>
+                  </widget>
+                  <packing>
+                    <property name="type">tab</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.IconView" id="iconview2">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="ViewTypePageHeaderLabel1">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Icon View</property>
+                  </widget>
+                  <packing>
+                    <property name="type">tab</property>
+                  </packing>
+                </child>
               </widget>
             </child>
           </widget>
           <packing>
-            <property name="Position">1</property>
+            <property name="Position">2</property>
             <property name="AutoSize">False</property>
           </packing>
         </child>
@@ -85,7 +158,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">2</property>
+            <property name="Position">3</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>

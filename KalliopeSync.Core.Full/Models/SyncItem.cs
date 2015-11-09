@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace KalliopeSync.Core.Models
 {
@@ -44,6 +46,25 @@ namespace KalliopeSync.Core.Models
             get;
             set;
         }
+
+        public SyncStatus Status
+        {
+            get;
+            set;
+        }
+
+        public FileInfo File
+        {
+            get;
+            set;
+        }
+
+        public CloudBlockBlob Blob
+        {
+            get;
+            set;
+        }
+
     }
 }
 
