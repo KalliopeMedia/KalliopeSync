@@ -18,7 +18,7 @@ namespace KalliopeSync.Core.Services
         private readonly string _containerName;
         private readonly CloudStorageAccount _storageAccount;
         private readonly Dictionary<string, CloudBlockBlob> _cloudRepository;
-        private readonly Dictionary<string, SyncItem> _index;
+        private readonly Dictionary<string, IndexItem> _index;
         private readonly string[] _patterns;
 
         public bool SimulationMode
@@ -27,7 +27,7 @@ namespace KalliopeSync.Core.Services
             set;
         }
 
-        public Dictionary<string,SyncItem> Index
+        public Dictionary<string,IndexItem> Index
         {
             get
             {
@@ -41,7 +41,7 @@ namespace KalliopeSync.Core.Services
             this._accountKey = accountKey;
             this._containerName = userName;
             this._cloudRepository = new Dictionary<string, CloudBlockBlob>();
-            this._index = new Dictionary<string, SyncItem>();
+            this._index = new Dictionary<string, IndexItem>();
 
             if (accountName == "" || accountKey == "")
             {
@@ -111,7 +111,7 @@ namespace KalliopeSync.Core.Services
         private void AddToIndex(string path, FileInfo fileInfo, CloudBlockBlob blob, SyncStatus status)
         {
             this.Index.Add(path, 
-                new SyncItem
+                new IndexItem
                 {
                     Path = path,
                     File = fileInfo,

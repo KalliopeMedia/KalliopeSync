@@ -4,9 +4,9 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace KalliopeSync.Core.Models
 {
-    public class SyncItem 
+    public class IndexItem 
     {
-        public SyncItem()
+        public IndexItem()
         {
 
         }

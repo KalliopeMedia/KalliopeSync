@@ -8,10 +8,10 @@ namespace KalliopeSync.View
         
         public SyncItem()
         {
-            this.ChildItems = new List<SyncItem>();
+            this.ChildItems = new Dictionary<string, SyncItem>();
         }
 
-        public List<SyncItem> ChildItems
+        public Dictionary<string, SyncItem> ChildItems
         {
             get;
             set;
@@ -55,6 +55,23 @@ namespace KalliopeSync.View
         {
             get;
             set;
+        }
+
+        public SyncItem AddItem(string path, KalliopeSync.Core.Models.IndexItem indexItem)
+        {
+            string [] pathStructure = path.Replace('\\','/').Split('/');
+            string key = pathStructure[0];
+            if (this.ChildItems.ContainsKey(key))
+            {
+                return this.ChildItems[key].AddItem(path.Replace(@"/" + key, ""), indexItem);
+            }
+            else
+            {
+                var newItem = new SyncItem { Id = DateTime.Now.Ticks, FileKey = indexItem.Path };
+                newItem.Name = key;
+                this.ChildItems.Add(path, newItem);
+                return newItem;
+            }
         }
     }
 }
