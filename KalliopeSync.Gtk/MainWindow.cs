@@ -11,37 +11,24 @@ public partial class MainWindow: Gtk.Window
         : base(Gtk.WindowType.Toplevel)
     {
         Build();
-        //SyncItem subitems = new List<SyncItem>();
-        SyncItem root = new SyncItem{ Id = DateTime.Now.Ticks, FileKey = "root", Name = "Root" };
+
+        SyncItem root = new SyncItem{ Id = DateTime.Now.Ticks, FileKey = "/root", Name = "Root" };
         for (int j = 0; j < 5; j++)
         {
-            string fileKey = "/root" + string.Format("/file/path/0/{0}{1}", root,j);   
-            var subRoot = root.AddItem(fileKey, new KalliopeSync.Core.Models.IndexItem{ Id = fileKey,Name= "Subroot" + j.ToString()});
- 
             for (int i = 0; i < 5; i++)
             {
+                string fileKey = "/root" + string.Format("/file/path/{0}/{1}{2}",i, string.Format("FileItem {0}-", i), j); 
                 KalliopeSync.Core.Models.IndexItem subItem = new KalliopeSync.Core.Models.IndexItem
-                    {
-                        Name = string.Format("FileItem {0}", i),
-                        Id = root.FileKey + string.Format("{0}{1}", i,j)
-                    };      
-                subRoot.AddItem(subItem.Id, subItem);
+                {
+                    Name = string.Format("FileItem {0}", i),
+                    Id = fileKey
+                };      
+                root.AddItem(subItem.Id, subItem);
             }
         }
 
-        Gtk.TreeStore syncItems = new Gtk.TreeStore(typeof(SyncItem));
-        //for (int i = 0; i < subitems.Count; i++)
-        {
-            var iter = syncItems.AppendValues(root);
-            foreach (var item in root.ChildItems)
-            {
-                var rootIter = syncItems.AppendValues(iter, item.Value);
-                foreach (var subItem in item.Value.ChildItems) {
-                    syncItems.AppendValues(rootIter, subItem.Value);
+        var syncItems = this.SyncLocationTreeView.DataBind(root);
 
-                }
-            }
-        }
         Gtk.TreeViewColumn folderNameColumn = new TreeViewColumn();
         folderNameColumn.Title = "Folders";
         Gtk.CellRendererText folderNameCell = new Gtk.CellRendererText();

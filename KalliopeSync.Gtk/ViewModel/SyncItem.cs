@@ -59,18 +59,23 @@ namespace KalliopeSync.View
 
         public SyncItem AddItem(string path, KalliopeSync.Core.Models.IndexItem indexItem)
         {
-            string [] pathStructure = path.Replace('\\','/').Split('/');
+            string [] pathStructure = path.Replace('\\','/').TrimStart(new [] {'/'}).Split('/');
             string key = pathStructure[0];
+            if (string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
             if (this.ChildItems.ContainsKey(key))
             {
                 return this.ChildItems[key].AddItem(path.Replace(@"/" + key, ""), indexItem);
             }
             else
             {
-                var newItem = new SyncItem { Id = DateTime.Now.Ticks, FileKey = indexItem.Path };
+                var newItem = new SyncItem { Id = DateTime.Now.Ticks, FileKey = indexItem.Id, Name = indexItem.Name };
                 newItem.Name = key;
-                this.ChildItems.Add(path, newItem);
-                return newItem;
+                this.ChildItems.Add(key, newItem);
+                return newItem.AddItem(path.Replace(@"/" + key, ""), indexItem);
+                                //return newItem;
             }
         }
     }
