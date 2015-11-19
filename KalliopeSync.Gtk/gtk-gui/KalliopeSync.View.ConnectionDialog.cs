@@ -12,29 +12,29 @@ namespace KalliopeSync.View
 		
 		private global::Gtk.TextView TextViewAccount;
 		
+		private global::Gtk.HBox hbox1;
+		
+		private global::Gtk.Label label3;
+		
+		private global::Gtk.TextView TextViewAccountKey;
+		
 		private global::Gtk.HBox hbox3;
 		
-		private global::Gtk.Label LabelAccountKey;
+		private global::Gtk.Label label4;
 		
-		private global::Gtk.TextView TextViewAccount1;
+		private global::Gtk.TextView TextViewContainer;
 		
 		private global::Gtk.HBox hbox4;
 		
-		private global::Gtk.Label LabelAccountKey1;
+		private global::Gtk.Label label5;
 		
-		private global::Gtk.TextView TextViewAccount2;
+		private global::Gtk.TextView TextViewSyncFolder;
 		
 		private global::Gtk.HBox hbox5;
 		
-		private global::Gtk.Label LabelAccountKey2;
+		private global::Gtk.Label label6;
 		
-		private global::Gtk.TextView TextViewAccount3;
-		
-		private global::Gtk.HBox hbox6;
-		
-		private global::Gtk.Label LabelAccountKey3;
-		
-		private global::Gtk.TextView TextViewAccount4;
+		private global::Gtk.CheckButton checkbutton1;
 		
 		private global::Gtk.Button buttonCancel;
 		
@@ -45,7 +45,12 @@ namespace KalliopeSync.View
 			global::Stetic.Gui.Initialize (this);
 			// Widget KalliopeSync.View.ConnectionDialog
 			this.Name = "KalliopeSync.View.ConnectionDialog";
+			this.Title = global::Mono.Unix.Catalog.GetString ("Connection Dialog");
+			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.Modal = true;
+			this.SkipPagerHint = true;
+			this.SkipTaskbarHint = true;
 			// Internal child KalliopeSync.View.ConnectionDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;
 			w1.Name = "dialog1_VBox";
@@ -81,128 +86,126 @@ namespace KalliopeSync.View
 			w3.Position = 1;
 			this.vbox4.Add (this.hbox2);
 			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox2]));
-			w4.Position = 1;
+			w4.Position = 0;
 			w4.Expand = false;
 			w4.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.hbox1 = new global::Gtk.HBox ();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.label3 = new global::Gtk.Label ();
+			this.label3.WidthRequest = 150;
+			this.label3.Name = "label3";
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Account Key");
+			this.hbox1.Add (this.label3);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.label3]));
+			w5.Position = 0;
+			w5.Expand = false;
+			w5.Fill = false;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.TextViewAccountKey = new global::Gtk.TextView ();
+			this.TextViewAccountKey.WidthRequest = 250;
+			this.TextViewAccountKey.HeightRequest = 25;
+			this.TextViewAccountKey.CanFocus = true;
+			this.TextViewAccountKey.Name = "TextViewAccountKey";
+			this.hbox1.Add (this.TextViewAccountKey);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.TextViewAccountKey]));
+			w6.Position = 1;
+			this.vbox4.Add (this.hbox1);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox1]));
+			w7.Position = 1;
+			w7.Expand = false;
+			w7.Fill = false;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.hbox3 = new global::Gtk.HBox ();
 			this.hbox3.Name = "hbox3";
 			this.hbox3.Spacing = 6;
 			// Container child hbox3.Gtk.Box+BoxChild
-			this.LabelAccountKey = new global::Gtk.Label ();
-			this.LabelAccountKey.WidthRequest = 150;
-			this.LabelAccountKey.Name = "LabelAccountKey";
-			this.LabelAccountKey.LabelProp = global::Mono.Unix.Catalog.GetString ("Account Key");
-			this.hbox3.Add (this.LabelAccountKey);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.LabelAccountKey]));
-			w5.Position = 0;
-			w5.Expand = false;
-			w5.Fill = false;
-			// Container child hbox3.Gtk.Box+BoxChild
-			this.TextViewAccount1 = new global::Gtk.TextView ();
-			this.TextViewAccount1.WidthRequest = 250;
-			this.TextViewAccount1.HeightRequest = 28;
-			this.TextViewAccount1.CanFocus = true;
-			this.TextViewAccount1.Name = "TextViewAccount1";
-			this.TextViewAccount1.AcceptsTab = false;
-			this.hbox3.Add (this.TextViewAccount1);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.TextViewAccount1]));
-			w6.Position = 1;
-			this.vbox4.Add (this.hbox3);
-			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox3]));
-			w7.Position = 2;
-			w7.Expand = false;
-			w7.Fill = false;
-			w1.Add (this.vbox4);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(w1 [this.vbox4]));
+			this.label4 = new global::Gtk.Label ();
+			this.label4.WidthRequest = 150;
+			this.label4.Name = "label4";
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Container");
+			this.hbox3.Add (this.label4);
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.label4]));
 			w8.Position = 0;
-			// Container child dialog1_VBox.Gtk.Box+BoxChild
+			w8.Expand = false;
+			w8.Fill = false;
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.TextViewContainer = new global::Gtk.TextView ();
+			this.TextViewContainer.WidthRequest = 250;
+			this.TextViewContainer.HeightRequest = 28;
+			this.TextViewContainer.CanFocus = true;
+			this.TextViewContainer.Name = "TextViewContainer";
+			this.hbox3.Add (this.TextViewContainer);
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.TextViewContainer]));
+			w9.Position = 1;
+			this.vbox4.Add (this.hbox3);
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox3]));
+			w10.Position = 2;
+			w10.Expand = false;
+			w10.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
 			this.hbox4 = new global::Gtk.HBox ();
 			this.hbox4.Name = "hbox4";
 			this.hbox4.Spacing = 6;
 			// Container child hbox4.Gtk.Box+BoxChild
-			this.LabelAccountKey1 = new global::Gtk.Label ();
-			this.LabelAccountKey1.WidthRequest = 150;
-			this.LabelAccountKey1.Name = "LabelAccountKey1";
-			this.LabelAccountKey1.LabelProp = global::Mono.Unix.Catalog.GetString ("Account Key");
-			this.hbox4.Add (this.LabelAccountKey1);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.LabelAccountKey1]));
-			w9.Position = 0;
-			w9.Expand = false;
-			w9.Fill = false;
-			// Container child hbox4.Gtk.Box+BoxChild
-			this.TextViewAccount2 = new global::Gtk.TextView ();
-			this.TextViewAccount2.WidthRequest = 250;
-			this.TextViewAccount2.HeightRequest = 28;
-			this.TextViewAccount2.CanFocus = true;
-			this.TextViewAccount2.Name = "TextViewAccount2";
-			this.TextViewAccount2.AcceptsTab = false;
-			this.hbox4.Add (this.TextViewAccount2);
-			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.TextViewAccount2]));
-			w10.Position = 1;
-			w1.Add (this.hbox4);
-			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox4]));
-			w11.Position = 1;
+			this.label5 = new global::Gtk.Label ();
+			this.label5.WidthRequest = 150;
+			this.label5.Name = "label5";
+			this.label5.LabelProp = global::Mono.Unix.Catalog.GetString ("Sync Folder");
+			this.hbox4.Add (this.label5);
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.label5]));
+			w11.Position = 0;
 			w11.Expand = false;
 			w11.Fill = false;
-			// Container child dialog1_VBox.Gtk.Box+BoxChild
+			// Container child hbox4.Gtk.Box+BoxChild
+			this.TextViewSyncFolder = new global::Gtk.TextView ();
+			this.TextViewSyncFolder.WidthRequest = 250;
+			this.TextViewSyncFolder.HeightRequest = 28;
+			this.TextViewSyncFolder.CanFocus = true;
+			this.TextViewSyncFolder.Name = "TextViewSyncFolder";
+			this.hbox4.Add (this.TextViewSyncFolder);
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.TextViewSyncFolder]));
+			w12.Position = 1;
+			this.vbox4.Add (this.hbox4);
+			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox4]));
+			w13.Position = 3;
+			w13.Expand = false;
+			w13.Fill = false;
+			// Container child vbox4.Gtk.Box+BoxChild
 			this.hbox5 = new global::Gtk.HBox ();
 			this.hbox5.Name = "hbox5";
 			this.hbox5.Spacing = 6;
 			// Container child hbox5.Gtk.Box+BoxChild
-			this.LabelAccountKey2 = new global::Gtk.Label ();
-			this.LabelAccountKey2.WidthRequest = 150;
-			this.LabelAccountKey2.Name = "LabelAccountKey2";
-			this.LabelAccountKey2.LabelProp = global::Mono.Unix.Catalog.GetString ("Account Key");
-			this.hbox5.Add (this.LabelAccountKey2);
-			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.LabelAccountKey2]));
-			w12.Position = 0;
-			w12.Expand = false;
-			w12.Fill = false;
-			// Container child hbox5.Gtk.Box+BoxChild
-			this.TextViewAccount3 = new global::Gtk.TextView ();
-			this.TextViewAccount3.WidthRequest = 250;
-			this.TextViewAccount3.HeightRequest = 28;
-			this.TextViewAccount3.CanFocus = true;
-			this.TextViewAccount3.Name = "TextViewAccount3";
-			this.TextViewAccount3.AcceptsTab = false;
-			this.hbox5.Add (this.TextViewAccount3);
-			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.TextViewAccount3]));
-			w13.Position = 1;
-			w1.Add (this.hbox5);
-			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox5]));
-			w14.Position = 2;
+			this.label6 = new global::Gtk.Label ();
+			this.label6.WidthRequest = 150;
+			this.label6.Name = "label6";
+			this.label6.LabelProp = global::Mono.Unix.Catalog.GetString ("Full Throttle? ");
+			this.hbox5.Add (this.label6);
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.label6]));
+			w14.Position = 0;
 			w14.Expand = false;
 			w14.Fill = false;
-			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.hbox6 = new global::Gtk.HBox ();
-			this.hbox6.Name = "hbox6";
-			this.hbox6.Spacing = 6;
-			// Container child hbox6.Gtk.Box+BoxChild
-			this.LabelAccountKey3 = new global::Gtk.Label ();
-			this.LabelAccountKey3.WidthRequest = 150;
-			this.LabelAccountKey3.Name = "LabelAccountKey3";
-			this.LabelAccountKey3.LabelProp = global::Mono.Unix.Catalog.GetString ("Account Key");
-			this.hbox6.Add (this.LabelAccountKey3);
-			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.hbox6 [this.LabelAccountKey3]));
-			w15.Position = 0;
-			w15.Expand = false;
-			w15.Fill = false;
-			// Container child hbox6.Gtk.Box+BoxChild
-			this.TextViewAccount4 = new global::Gtk.TextView ();
-			this.TextViewAccount4.WidthRequest = 250;
-			this.TextViewAccount4.HeightRequest = 28;
-			this.TextViewAccount4.CanFocus = true;
-			this.TextViewAccount4.Name = "TextViewAccount4";
-			this.TextViewAccount4.AcceptsTab = false;
-			this.hbox6.Add (this.TextViewAccount4);
-			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.hbox6 [this.TextViewAccount4]));
-			w16.Position = 1;
-			w1.Add (this.hbox6);
-			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox6]));
-			w17.Position = 3;
-			w17.Expand = false;
-			w17.Fill = false;
+			// Container child hbox5.Gtk.Box+BoxChild
+			this.checkbutton1 = new global::Gtk.CheckButton ();
+			this.checkbutton1.CanFocus = true;
+			this.checkbutton1.Name = "checkbutton1";
+			this.checkbutton1.Label = "";
+			this.checkbutton1.Active = true;
+			this.checkbutton1.DrawIndicator = true;
+			this.checkbutton1.UseUnderline = true;
+			this.hbox5.Add (this.checkbutton1);
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.checkbutton1]));
+			w15.Position = 1;
+			this.vbox4.Add (this.hbox5);
+			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox5]));
+			w16.Position = 4;
+			w16.Expand = false;
+			w16.Fill = false;
+			w1.Add (this.vbox4);
+			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(w1 [this.vbox4]));
+			w17.Position = 0;
 			// Internal child KalliopeSync.View.ConnectionDialog.ActionArea
 			global::Gtk.HButtonBox w18 = this.ActionArea;
 			w18.Name = "dialog1_ActionArea";
@@ -237,7 +240,7 @@ namespace KalliopeSync.View
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 426;
+			this.DefaultWidth = 441;
 			this.DefaultHeight = 300;
 			this.Show ();
 		}
