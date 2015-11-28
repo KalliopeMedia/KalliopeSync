@@ -14,6 +14,7 @@
     <property name="TypeHint">Dialog</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Modal">True</property>
+    <property name="DestroyWithParent">True</property>
     <property name="SkipPagerHint">True</property>
     <property name="SkipTaskbarHint">True</property>
     <property name="Buttons">2</property>
@@ -278,6 +279,7 @@
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
             <property name="ResponseId">-5</property>
+            <signal name="Clicked" handler="OnButtonOkClicked" />
             <property name="label">gtk-ok</property>
           </widget>
           <packing>
@@ -298,16 +300,15 @@
       </action>
       <action id="ConnectAction">
         <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Primary&gt;c</property>
         <property name="Label" translatable="yes">Connect</property>
         <property name="ShortLabel" translatable="yes">Connect</property>
-        <signal name="Activated" handler="OnAfterConnectActionActivated" after="yes" />
+        <signal name="Activated" handler="OnConnectActionActivated" />
       </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainView</property>
     <property name="WindowPosition">CenterOnParent</property>
-    <signal name="DestroyEvent" handler="MainWindowDestroyEvent" />
-    <signal name="DeleteEvent" handler="MainWindowDeleteEvent" />
     <child>
       <widget class="Gtk.VBox" id="vbox2">
         <property name="MemberName" />

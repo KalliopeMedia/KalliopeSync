@@ -94,6 +94,7 @@
     <Compile Include="gtk-gui\KalliopeSync.View.ConnectionDialog.cs" />
     <Compile Include="Views\MainView.cs" />
     <Compile Include="gtk-gui\KalliopeSync.View.MainView.cs" />
+    <Compile Include="ViewModel\ViewConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

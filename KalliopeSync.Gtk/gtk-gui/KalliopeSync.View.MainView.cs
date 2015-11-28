@@ -47,7 +47,7 @@ namespace KalliopeSync.View
 			w1.Add (this.FileAction, null);
 			this.ConnectAction = new global::Gtk.Action ("ConnectAction", global::Mono.Unix.Catalog.GetString ("Connect"), null, null);
 			this.ConnectAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Connect");
-			w1.Add (this.ConnectAction, null);
+			w1.Add (this.ConnectAction, "<Primary>c");
 			this.UIManager.InsertActionGroup (w1, 0);
 			this.AddAccelGroup (this.UIManager.AccelGroup);
 			this.Name = "KalliopeSync.View.MainView";
@@ -148,9 +148,7 @@ namespace KalliopeSync.View
 			this.DefaultWidth = 535;
 			this.DefaultHeight = 434;
 			this.Show ();
-			this.DestroyEvent += new global::Gtk.DestroyEventHandler (this.MainWindowDestroyEvent);
-			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.MainWindowDeleteEvent);
-			this.ConnectAction.Activated += new global::System.EventHandler (this.OnAfterConnectActionActivated);
+			this.ConnectAction.Activated += new global::System.EventHandler (this.OnConnectActionActivated);
 		}
 	}
 }

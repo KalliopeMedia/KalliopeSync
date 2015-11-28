@@ -5,34 +5,40 @@ namespace KalliopeSync.View
     public partial class MainView : Gtk.Window
     {
         ConnectionDialog _connectionDialog;
+        ViewConfig _configuration;
 
         public MainView()
             : base(Gtk.WindowType.Toplevel)
         {
             this.Build();
-        }
-
-        protected void OnAfterConnectActionActivated (object sender, EventArgs e)
-        {
             _connectionDialog = new ConnectionDialog();
+            _connectionDialog.Hide();
+            _connectionDialog.Close += ConnectionDialogClosed;
 
-            _connectionDialog.Show();
+            this._configuration = new ViewConfig();
         }
 
-        protected void MainWindowDestroyEvent (object o, Gtk.DestroyEventArgs args)
+        void ConnectionDialogClosed (object sender, EventArgs e)
         {
-            _connectionDialog.Destroy();
+            UpdateViewConfig((sender as ConnectionDialog).Configuration);
         }
-
-        public override void Destroy()
+           
+        void UpdateViewConfig(ViewConfig config)
         {
-            base.Destroy();
+            _configuration.AcccountKey = config.AcccountKey;
+            _configuration.AccountName = config.AccountName;
+            _configuration.ContainerName = config.ContainerName;
+            _configuration.SyncFolder = config.SyncFolder;
         }
-
-        protected void MainWindowDeleteEvent (object o, Gtk.DeleteEventArgs args)
+            
+        protected void OnConnectActionActivated (object sender, EventArgs e)
         {
             
+            _connectionDialog.ShowDialog(_configuration);
+            Console.Write("HERE");
         }
+
+
     }
 }
 

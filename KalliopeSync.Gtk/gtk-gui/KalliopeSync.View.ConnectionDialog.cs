@@ -49,6 +49,7 @@ namespace KalliopeSync.View
 			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.Modal = true;
+			this.DestroyWithParent = true;
 			this.SkipPagerHint = true;
 			this.SkipTaskbarHint = true;
 			// Internal child KalliopeSync.View.ConnectionDialog.VBox
@@ -243,6 +244,7 @@ namespace KalliopeSync.View
 			this.DefaultWidth = 441;
 			this.DefaultHeight = 300;
 			this.Show ();
+			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkClicked);
 		}
 	}
 }
