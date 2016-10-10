@@ -82,7 +82,7 @@ namespace KalliopeSync.Tests.Core
                 "/.*"
             };
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetupIndexerTest()
         {
             Console.WriteLine("----------------- START -----------------------");
@@ -90,7 +90,7 @@ namespace KalliopeSync.Tests.Core
             System.IO.File.WriteAllLines(fileName, patterns);
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TearDownIndexerTest()
         {
             Console.WriteLine("-------------------END------------------------");

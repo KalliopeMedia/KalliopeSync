@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Auth;
+using KalliopeSync.Core.Models;
 
 namespace KalliopeSync.Core.Services
 {
@@ -17,6 +18,7 @@ namespace KalliopeSync.Core.Services
         private readonly string _containerName;
         private readonly CloudStorageAccount _storageAccount;
         private readonly Dictionary<string, CloudBlockBlob> _cloudRepository;
+        private readonly Dictionary<string, IndexItem> _index;
         private readonly string[] _patterns;
 
         public bool SimulationMode
@@ -25,12 +27,21 @@ namespace KalliopeSync.Core.Services
             set;
         }
 
+        public Dictionary<string,IndexItem> Index
+        {
+            get
+            {
+                return _index;
+            }
+        }
+
         public Indexer(string userName, string accountName, string accountKey, string targetFolder)
         {
             this._accountName = accountName;
             this._accountKey = accountKey;
             this._containerName = userName;
             this._cloudRepository = new Dictionary<string, CloudBlockBlob>();
+            this._index = new Dictionary<string, IndexItem>();
 
             if (accountName == "" || accountKey == "")
             {
@@ -82,6 +93,7 @@ namespace KalliopeSync.Core.Services
                 {
                     Logging.Logger.Info(string.Format("Added File to UploadList: {0}", blobReferenceName));
                     uploadList.Add(item.Value);
+                    this.AddToIndex(blobReferenceName, item.Value, null, SyncStatus.UploadPending);
                 }
                 else if (_cloudRepository.ContainsKey(blobReferenceName))
                 {
@@ -89,6 +101,11 @@ namespace KalliopeSync.Core.Services
                     {
                         Logging.Logger.Info(string.Format("Added File to UploadList (changed): {0}, cloud {1}, local {2}", blobReferenceName, _cloudRepository[blobReferenceName].Properties.Length, item.Value.Length));
                         uploadList.Add(item.Value);
+                        this.AddToIndex(blobReferenceName, item.Value, null, SyncStatus.UploadPending);
+                    }
+                    else
+                    {
+                        this.AddToIndex(blobReferenceName, item.Value, null, SyncStatus.InSync);
                     }
                 }
             }
@@ -98,6 +115,18 @@ namespace KalliopeSync.Core.Services
             return uploadList;
         }
 
+        private void AddToIndex(string path, FileInfo fileInfo, CloudBlockBlob blob, SyncStatus status)
+        {
+            this.Index.Add(path, 
+                new IndexItem
+                {
+                    Path = path,
+                    File = fileInfo,
+                    Blob = blob,
+                    Status = status
+                });
+
+        }
         public IEnumerable<CloudBlockBlob> CreateDeleteList()
         {
             return null;

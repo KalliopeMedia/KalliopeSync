@@ -63,7 +63,8 @@
     <Compile Include="Services\Indexer.cs" />
     <Compile Include="Services\Uploader.cs" />
     <Compile Include="Services\VirtualFileSystem.cs" />
-    <Compile Include="Models\SyncItem.cs" />
+    <Compile Include="Models\SyncStatus.cs" />
+    <Compile Include="Models\IndexItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
