@@ -42,10 +42,12 @@
     <Compile Include="Model\SyncHistory.cs" />
     <Compile Include="Services\SyncHistoryService.cs" />
     <Compile Include="Services\SyncItemServices.cs" />
+    <Compile Include="Interfaces\ISyncItemServices.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="Services\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>

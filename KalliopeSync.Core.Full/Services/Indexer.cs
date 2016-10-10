@@ -58,11 +58,17 @@ namespace KalliopeSync.Core.Services
             foreach (IListBlobItem item in container.ListBlobs(null, true))
             {
                 CloudBlockBlob blob = (CloudBlockBlob)item;
-                Logging.Logger.Info(string.Format("Cloud List: Blob Name '{0}'", blob.Name));
+                Logging.Logger.Info(string.Format("In Cloud currently: Name '{0}'", blob.Name));
                 _cloudRepository[System.Net.WebUtility.HtmlDecode(blob.Name)] = blob;
             }
 
+            Console.WriteLine($"Processing Blob store complete, {_cloudRepository.Count} file(s) in Blob store");
+            Logging.Logger.Info($"Processing Blob store complete, {_cloudRepository.Count} file(s) in Blob store");
+
             var localRepository = GetLocalRepository(targetFolder, null);
+            Console.WriteLine($"Processing Local store complete, {localRepository.Count} file(s) in Local store");
+            Logging.Logger.Info($"Processing Local store complete, {localRepository.Count} file(s) in Local store");
+
             var uploadList = new List<FileInfo>();
 
             Console.WriteLine("Creating Upload List");
@@ -86,8 +92,9 @@ namespace KalliopeSync.Core.Services
                     }
                 }
             }
-            Console.WriteLine("Creating Upload List COMPLETE --------------------------");
-            Logging.Logger.Info("Creating Upload List COMPLETE ------------------------");
+            Console.WriteLine($"Creating Upload List COMPLETE, {uploadList.Count} file(s) in Upload List");
+            Logging.Logger.Info($"Creating Upload List COMPLETE, {uploadList.Count} file(s) in Upload List");
+
             return uploadList;
         }
 
@@ -115,7 +122,7 @@ namespace KalliopeSync.Core.Services
                     if (IsFileIncluded(file, _patterns))
                     {
                         localRepository.Add(file, new FileInfo(file));
-                        Logging.Logger.Info(string.Format("Added File to Repo: {0}", file));
+                        Logging.Logger.Info(string.Format("File in local Repo: {0}", file));
                     }
                     else
                     {

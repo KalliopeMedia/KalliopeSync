@@ -18,7 +18,7 @@ namespace KalliopeSync.Core.Services
         private readonly Dictionary<string, CloudBlockBlob> _cloudRepository;
         private readonly Dictionary<string, FileInfo> _localRepository;
         private readonly CloudStorageAccount _storageAccount;
-       
+
         public int ChunkSize
         {
             get;
@@ -46,7 +46,7 @@ namespace KalliopeSync.Core.Services
             this._localRepository = new Dictionary<string, FileInfo>();
             this.FullThrottle = true;
             this.ChunkSize = 1024;
-            var cloudConnectionString = string.Format ("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", _accountName, _accountKey);
+            var cloudConnectionString = string.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", _accountName, _accountKey);
             _storageAccount = CloudStorageAccount.Parse(cloudConnectionString);
         }
 
@@ -65,55 +65,58 @@ namespace KalliopeSync.Core.Services
         {
             Console.WriteLine("Processing Uploads.");
             Logging.Logger.Info("Processing Uploads------------------------");
+            var successCount = 0;
             foreach (var fileInfo in uploadList)
             {
                 string blobReferenceName = GetBlobReferenceName(fileInfo.FullName, targetFolder);
 
                 try
                 {
-                if (!SimulationMode)
-                {
-                    var blockBlob = container.GetBlockBlobReference(blobReferenceName);
-
-                    using (var fileStream = System.IO.File.OpenRead(fileInfo.FullName))
+                    if (!SimulationMode)
                     {
-                        if (this.FullThrottle)
+                        var blockBlob = container.GetBlockBlobReference(blobReferenceName);
+
+                        using (var fileStream = System.IO.File.OpenRead(fileInfo.FullName))
                         {
-                            blockBlob.UploadFromStream(fileStream);
-                            Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
-                        }
-                        else
-                        {
-                            byte[] chunk = new byte[ChunkSize];
-                            var id = 1;
-                            var idList = new List<string>();
-                            while (fileStream.Position < fileStream.Length)
+                            if (this.FullThrottle)
                             {
-                                fileStream.Read(chunk, 0, ChunkSize);
-                                string id64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(
-                                    string.Format(CultureInfo.InvariantCulture, "{0:D4}", id)));
-                                blockBlob.PutBlock(id64, new MemoryStream(chunk), null, null, null);
-                                idList.Add(id64);
-                                id++;
-                                Thread.Sleep(500);
+                                blockBlob.UploadFromStream(fileStream);
+                                Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
                             }
-                            blockBlob.PutBlockList(idList);
-                            Logging.Logger.Info(string.Format("Uploaded Chunked file: File {0} to Blob Reference {1} of length {2} in {3} chunks", fileInfo.FullName, blobReferenceName, fileStream.Length, id));
+                            else
+                            {
+                                byte[] chunk = new byte[ChunkSize];
+                                var id = 1;
+                                var idList = new List<string>();
+                                while (fileStream.Position < fileStream.Length)
+                                {
+                                    fileStream.Read(chunk, 0, ChunkSize);
+                                    string id64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(
+                                                      string.Format(CultureInfo.InvariantCulture, "{0:D4}", id)));
+                                    blockBlob.PutBlock(id64, new MemoryStream(chunk), null, null, null);
+                                    idList.Add(id64);
+                                    id++;
+                                    Thread.Sleep(500);
+                                }
+                                blockBlob.PutBlockList(idList);
+                                Logging.Logger.Info(string.Format("Uploaded Chunked file: File {0} to Blob Reference {1} of length {2} in {3} chunks", fileInfo.FullName, blobReferenceName, fileStream.Length, id));
+                            }
+                            successCount++;
                         }
-                    }
                     }
                     else
                     {
                         Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+                        successCount++;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logging.Logger.Error(string.Format("Failed to upload: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName), ex);
                 }
             }
-            Console.WriteLine("Processing Uploads COMPLETE");
-            Logging.Logger.Info("Processing Uploads COMPLETE----------------");
+            Console.WriteLine($"Processing Uploads COMPLETE, {successCount} file(s) uploaded");
+            Logging.Logger.Info($"Processing Uploads COMPLETE, {successCount} file(s) uploaded");
 
         }
 
@@ -124,9 +127,9 @@ namespace KalliopeSync.Core.Services
 
         private string GetBlobReferenceName(string fullFileName, string targetFolder)
         {
-            string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "").Replace(@"\",@"/");
+            string blobReferenceName = Path.GetFullPath(fullFileName).Replace(targetFolder, "").Replace(@"\", @"/");
             return System.Net.WebUtility.HtmlEncode(blobReferenceName);
-        }       
+        }
     }
 }
 

@@ -14,16 +14,6 @@ namespace KalliopeSync.Tests
         {
         }
 
-        [TestFixtureSetUp]
-        public void SetupIndexerTest()
-        {
-        }
-
-        [TestFixtureTearDown]
-        public void TearDownIndexerTest()
-        {
-        }
-
         [Test()]
         public void CreateDbUsingProviderTest()
         {

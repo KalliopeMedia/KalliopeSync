@@ -55,7 +55,6 @@ namespace KalliopeSync.Core.Services
                     else
                     {
                         Logging.Logger.Info(string.Format("Skipping {0} - size {1} because of maxCount - m={2}", blob.Name, blob.Properties.Length, maxCount));
-//                        Console.WriteLine("Not attempting download of - Block blob of length {0}: {1}", blob.Properties.Length, blob.Uri);
                     }
                 }
                 else if (item.GetType() == typeof(CloudPageBlob))
@@ -69,20 +68,22 @@ namespace KalliopeSync.Core.Services
                     Console.WriteLine("Directory: {0}", directory.Uri);
                 }
             }
-            Console.WriteLine("Processing Downloads COMPLETE");
-            Logging.Logger.Info("Processing Downloads COMPLETE------------");
+            Console.WriteLine($"Processing Downloads COMPLETE, {currentCount} file(s) to downloaded");
+            Logging.Logger.Info($"Processing Downloads COMPLETE, {currentCount} file(s) to downloaded");
 
         }
 
         private int DownloadBlob(CloudBlockBlob blockBlob, string targetFolder, int currentCount)
         {
-            string targetFileName = string.Format("{0}{1}{2}", targetFolder, Path.DirectorySeparatorChar.ToString(), blockBlob.Name.TrimStart(Path.DirectorySeparatorChar));
+            string decodedBlockBlobName = System.Net.WebUtility.HtmlDecode(blockBlob.Name).TrimStart(Path.DirectorySeparatorChar);
+            string targetFileName = string.Format("{0}{1}{2}", targetFolder, Path.DirectorySeparatorChar.ToString(), decodedBlockBlobName);
             Logging.Logger.Info(string.Format("Target Folder: {0} Target file: {1} ", targetFolder, targetFileName));
 
-            string tempName = Path.Combine(targetFolder, Guid.NewGuid() + blockBlob.Name);
+            string tempName = Path.Combine(targetFolder, Guid.NewGuid() + decodedBlockBlobName);
             if (!File.Exists(targetFileName))
             {
                 Logging.Logger.Info(string.Format("Local file {0} doesn't exist, download size {1}.", targetFileName, blockBlob.Properties.Length));
+                currentCount++;
                 if (!SimulationMode)
                 {
                     using (var fileStream = System.IO.File.OpenWrite(targetFileName))
@@ -90,7 +91,6 @@ namespace KalliopeSync.Core.Services
                         blockBlob.DownloadToStream(fileStream);
                     }
                     File.SetCreationTime(targetFileName, blockBlob.Properties.LastModified.Value.DateTime);
-                    currentCount++;
                 }
                 else
                 {
@@ -102,21 +102,28 @@ namespace KalliopeSync.Core.Services
                 FileInfo info = new FileInfo(targetFileName);
                 if (blockBlob.Properties.Length != info.Length)
                 {
-                    Logging.Logger.Info(string.Format("Local file size: {0}, online file size: {1} - Downloading...", info.Length, blockBlob.Properties.Length));
-                    if (!SimulationMode)
+                    if (blockBlob.Properties.LastModified.HasValue && blockBlob.Properties.LastModified.Value.DateTime > info.LastWriteTime)
                     {
-                        using (var fileStream = System.IO.File.OpenWrite(tempName))
-                        {
-                            blockBlob.DownloadToStream(fileStream);
-                        }
-                        File.Delete(targetFileName);
-                        File.Move(tempName, targetFileName);
+                        Logging.Logger.Info(string.Format("Local file size: {0}, online file size: {1} Blob Updated: {2} FileUpdated: {3} Downloading...", info.Length, blockBlob.Properties.Length, blockBlob.Properties.LastModified.Value.DateTime, info.LastWriteTime));
                         currentCount++;
-                        File.SetCreationTime(targetFileName, blockBlob.Properties.LastModified.Value.DateTime);
+                        if (!SimulationMode)
+                        {
+                            using (var fileStream = System.IO.File.OpenWrite(tempName))
+                            {
+                                blockBlob.DownloadToStream(fileStream);
+                            }
+                            File.Delete(targetFileName);
+                            File.Move(tempName, targetFileName);
+                            File.SetCreationTime(targetFileName, blockBlob.Properties.LastModified.Value.DateTime);
+                        }
+                        else
+                        {
+                            Logging.Logger.Info(string.Format("Download {0} to {1}", blockBlob.Name, targetFolder));
+                        }
                     }
                     else
                     {
-                        Logging.Logger.Info(string.Format("Download {0} to {1}", blockBlob.Name, targetFolder));
+                        Logging.Logger.Info(string.Format("Local file size: {0}, online file size: {1} - Could not determine last updated, local wins.", info.Length, blockBlob.Properties.Length));
                     }
                 }
                 else
