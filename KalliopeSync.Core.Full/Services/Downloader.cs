@@ -79,7 +79,7 @@ namespace KalliopeSync.Core.Services
             string targetFileName = string.Format("{0}{1}{2}", targetFolder, Path.DirectorySeparatorChar.ToString(), decodedBlockBlobName);
             Logging.Logger.Info(string.Format("Target Folder: {0} Target file: {1} ", targetFolder, targetFileName));
 
-            string tempName = Path.Combine(targetFolder, Guid.NewGuid() + decodedBlockBlobName);
+            string tempName = Path.Combine(Path.Combine(targetFolder, Guid.NewGuid().ToString()));
             if (!File.Exists(targetFileName))
             {
                 Logging.Logger.Info(string.Format("Local file {0} doesn't exist, download size {1}.", targetFileName, blockBlob.Properties.Length));

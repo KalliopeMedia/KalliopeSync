@@ -80,8 +80,28 @@ namespace KalliopeSync.Core.Services
                         {
                             if (this.FullThrottle)
                             {
-                                blockBlob.UploadFromStream(fileStream);
-                                Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+                                var mB = ChunkSize;
+                                if (fileStream.Length > mB)
+                                {
+                                    byte[] chunk = new byte[mB];
+                                    var id = 1;
+                                    var idList = new List<string>();
+                                    while (fileStream.Position < fileStream.Length)
+                                    {
+                                        fileStream.Read(chunk, 0, mB);
+                                        string id64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(
+                                                              string.Format(CultureInfo.InvariantCulture, "{0:D4}", id)));
+                                        blockBlob.PutBlock(id64, new MemoryStream(chunk), null, null, null);
+                                        idList.Add(id64);
+                                        id++;
+                                    }
+                                    blockBlob.PutBlockList(idList);
+                                }
+                                else
+                                {
+                                    blockBlob.UploadFromStream(fileStream);
+                                    Logging.Logger.Info(string.Format("Uploading: File {0} to Blob Reference {1}", fileInfo.FullName, blobReferenceName));
+                                }
                             }
                             else
                             {
@@ -92,7 +112,7 @@ namespace KalliopeSync.Core.Services
                                 {
                                     fileStream.Read(chunk, 0, ChunkSize);
                                     string id64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(
-                                                      string.Format(CultureInfo.InvariantCulture, "{0:D4}", id)));
+                                                          string.Format(CultureInfo.InvariantCulture, "{0:D4}", id)));
                                     blockBlob.PutBlock(id64, new MemoryStream(chunk), null, null, null);
                                     idList.Add(id64);
                                     id++;

@@ -75,15 +75,16 @@ namespace KalliopeSync.Console
                     //int.TryParse(maxCount, out result);
                     result = maxCount;
                     System.Console.WriteLine(
-                        string.Format("Options: \r\n 1-n: {0} \r\n 2-k: {1} \r\n 3-c: {2} \r\n 4-t: {3} \r\n 5-m: {4} \r 6-f: {5}, \r 7-v: {6}, \r 8-h: {7}", 
-                            accountName,
-                            accountKey,
-                            container,
-                            output,
-                            maxCount,
-                            fullThrottle.ToString(),
-                            moveall.ToString(),
-                            showHelp.ToString()));
+                        "Options: \r\n " +
+                        $"1-n: {accountName} \r\n " +
+                        $"2-k: {accountKey} \r\n " +
+                        $"3-c: {container} \r\n " +
+                        $"4-t: {output} \r\n " +
+                        $"5-m: {maxCount} \r\n " +
+                        $"6-f: {fullThrottle.ToString()}, \r\n " +
+                        $"7-v: {moveall.ToString()}, \r\n " +
+                        $"8-h: {showHelp.ToString()}"); 
+
                     Logging.Logger.Info(string.Format("Starting new session id: {0} at {1} :---------------------", sessionId, DateTime.Now.ToLongDateString()));
                     Downloader downloader = new Downloader(container, accountName, accountKey);
                     downloader.SimulationMode = simulate;
