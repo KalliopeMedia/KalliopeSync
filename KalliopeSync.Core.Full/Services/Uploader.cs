@@ -80,17 +80,24 @@ namespace KalliopeSync.Core.Services
                         {
                             if (this.FullThrottle)
                             {
-                                var mB = ChunkSize;
+                                var mB = ChunkSize * ChunkSize;
                                 if (fileStream.Length > mB)
                                 {
-                                    byte[] chunk = new byte[mB];
                                     var id = 1;
                                     var idList = new List<string>();
+                                    Console.WriteLine($"Uploading big file {fileInfo.FullName}");
                                     while (fileStream.Position < fileStream.Length)
                                     {
+                                        byte[] chunk = new byte[mB];
+                                        var remainder = (int)(fileStream.Length - fileStream.Position);
+                                        if(remainder < mB)
+                                        {
+                                            chunk = new byte[remainder];
+                                            mB = remainder;
+                                        }
+                                        string id64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()));
+                                        Console.WriteLine(string.Format($"Reading chunk {id64} at position {fileStream.Position} of size {chunk.Length}"));
                                         fileStream.Read(chunk, 0, mB);
-                                        string id64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(
-                                                              string.Format(CultureInfo.InvariantCulture, "{0:D4}", id)));
                                         blockBlob.PutBlock(id64, new MemoryStream(chunk), null, null, null);
                                         idList.Add(id64);
                                         id++;
