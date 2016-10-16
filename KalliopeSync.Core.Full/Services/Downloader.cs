@@ -86,6 +86,10 @@ namespace KalliopeSync.Core.Services
                 currentCount++;
                 if (!SimulationMode)
                 {
+                    var outFolder = Path.GetDirectoryName(targetFileName);
+                    if(!Directory.Exists(outFolder)){
+                        Directory.CreateDirectory(outFolder);
+                    }
                     using (var fileStream = System.IO.File.OpenWrite(targetFileName))
                     {
                         blockBlob.DownloadToStream(fileStream);
